@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/redmask-hb/GoSimplePrint/goPrint"
 	"log"
 	"novel_crawler/crawler"
@@ -38,7 +39,6 @@ func doCrawler(urlStr, fileName string) {
 			bar := goPrint.NewBar(len(chapters))
 			bar.SetNotice("已下载章节：")
 			bar.SetGraph(">")
-			bar.SetNoticeColor(goPrint.FontColor.Red)
 
 			// 创建文件
 			file, err := os.Create(fileName)
@@ -80,7 +80,7 @@ func doCrawler(urlStr, fileName string) {
 			w.Wait()
 
 			time.Sleep(time.Millisecond * 100) // 休眠0.1秒，让控制台io同步
-			log.Println()
+			fmt.Println()
 			log.Println("所有章节爬取完毕......")
 			log.Println("正在把爬取结果写入文件......")
 			for _, cha := range chapters {
@@ -99,6 +99,7 @@ func doCrawler(urlStr, fileName string) {
 }
 
 func main() {
+	log.Println("注意，如果程序超过一分钟无响应，请重新执行")
 	var fileName = flag.String("f", "", "保存文件名")
 	var urlStr = flag.String("u", "", "url链接")
 	flag.Parse()
