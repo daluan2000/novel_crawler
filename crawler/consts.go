@@ -55,6 +55,16 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 			"<br>": "",
 		},
 	},
+	"www.tianyabook.com": {
+		ASelector:       ".panel-body > dd > a",
+		ContentSelector: "#htmlContent",
+		StrReplace: map[string]string{
+			"聽":     "",
+			"<br>":  "",
+			"<br/>": "",
+		},
+		RemoveSelector: []string{"p"},
+	},
 }
 
 type NewBiQuGeInfo struct {
