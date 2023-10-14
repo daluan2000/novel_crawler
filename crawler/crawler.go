@@ -12,6 +12,7 @@ import (
 	"net/http"
 	u "net/url"
 	"os"
+	"strings"
 	"time"
 	"unicode/utf8"
 )
@@ -74,8 +75,13 @@ func CreateCrawler(novelUrlStr string) (CrawlerInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, ok := BiQuGeInfoByHost[novelUrl.Host]; ok {
+	if _, ok := BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &BiQuGeCrawler{
+			novelUrl: novelUrl,
+		}, nil
+	}
+	if _, ok := NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+		return &NewBiQuGeCrawler{
 			novelUrl: novelUrl,
 		}, nil
 	}
@@ -94,4 +100,23 @@ func GbkToUtf8(s []byte) ([]byte, error) {
 		return nil, e
 	}
 	return d, nil
+}
+
+func RemoveHtmlElem(str, selector string) (string, error) {
+
+	dom, err := goquery.NewDocumentFromReader(strings.NewReader(str))
+	if err != nil {
+		return "", err
+	}
+
+	// 删除符合seletor的元素
+	dom.Find(selector).Remove()
+
+	res, err := dom.Html()
+	if err != nil {
+		return "", err
+	}
+
+	res = res[25 : len(res)-14]
+	return res, nil
 }

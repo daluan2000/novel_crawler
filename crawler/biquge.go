@@ -14,7 +14,7 @@ type BiQuGeCrawler struct {
 
 // filterChapter 对爬取到的目录进行一些过滤操作
 // 笔趣阁目录页面，头部有一些章节重复 大概是这种形式 [6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8]，应该把头三个元素去掉 https://www.52bqg.org/book_128955/
-func filterChapter(chapters []Chapter) []Chapter {
+func (b *BiQuGeCrawler) chapterFilter(chapters []Chapter) []Chapter {
 
 	m := make(map[string]int)
 	for _, i := range chapters {
@@ -62,7 +62,7 @@ func (b *BiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 
 	})
 
-	r = filterChapter(r)
+	r = b.chapterFilter(r)
 	return r, nil
 }
 
@@ -86,6 +86,13 @@ func (b *BiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 		return err
 	}
 
+	// 删除content文本中的某些标签
+	for _, v := range BiQuGeInfoByHost[b.novelUrl.Hostname()].RemoveSelector {
+		c.Content, err = RemoveHtmlElem(c.Content, v)
+		if err != nil {
+			return err
+		}
+	}
 	// 对content字符串进行替换
 	rp := BiQuGeInfoByHost[b.novelUrl.Hostname()].StrReplace
 	for k, v := range rp {
