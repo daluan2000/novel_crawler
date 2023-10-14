@@ -37,14 +37,14 @@ func filterChapter(chapters []Chapter) []Chapter {
 
 func (b *BiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 	// 发起http请求，获取网页内容并解析
-	dom, err := createGoQuery(b.novelUrl.String())
+	dom, err := CreateGoQuery(b.novelUrl.String())
 	if err != nil {
 		return nil, err
 	}
 
 	// 获取章节目录信息
 	r := make([]Chapter, 0)
-	dom.Find(HostBiQuGe[b.novelUrl.Hostname()].ASelector).Each(func(i int, selection *goquery.Selection) {
+	dom.Find(BiQuGeInfoByHost[b.novelUrl.Hostname()].ASelector).Each(func(i int, selection *goquery.Selection) {
 		// 获取a标签链接
 		if path, ok := selection.Attr("href"); ok {
 			// 把a标签链接转为url
@@ -68,13 +68,13 @@ func (b *BiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 
 func (b *BiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 	// 发起http请求，获取网页内容并解析
-	dom, err := createGoQuery(c.UrlStr)
+	dom, err := CreateGoQuery(c.UrlStr)
 	if err != nil {
 		return err
 	}
 
 	// 获取章节content
-	c.Content, err = dom.Find(HostBiQuGe[b.novelUrl.Hostname()].ContentSelector).Html()
+	c.Content, err = dom.Find(BiQuGeInfoByHost[b.novelUrl.Hostname()].ContentSelector).Html()
 	if err != nil {
 		return err
 	}
@@ -87,7 +87,7 @@ func (b *BiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 	}
 
 	// 对content字符串进行替换
-	rp := HostBiQuGe[b.novelUrl.Hostname()].StrReplace
+	rp := BiQuGeInfoByHost[b.novelUrl.Hostname()].StrReplace
 	for k, v := range rp {
 		c.Content = strings.Replace(c.Content, k, v, -1)
 	}
@@ -99,7 +99,7 @@ func (b *BiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 	//		return err
 	//	}
 	//	if bts, err := GbkToUtf8([]byte(htmlText)); err == nil {
-	//		c.Content = string(bts)
+	//		c.Content = "\n" + string(bts) + "\n"
 	//	} else {
 	//		return err
 	//	}
