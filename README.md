@@ -1,6 +1,11 @@
+## 声明
+编写本爬虫程序的初衷是学习和练习爬虫技术，本程序仅作学习交流使用，禁止用于任何商业用途。
+
+如果本程序侵犯了您的权益，请通过邮箱daluan2000@qq.com联系我，我将尽快删除侵权部分。
+
 ## 功能
 
-爬取网站上小说章节的内容，并以txt形式保存在本地
+爬取网站上小说章节的内容，并以txt形式保存在本地。
 
 程序运行需要的参数如下：
 
@@ -28,13 +33,42 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 1. www.2biqu.com 笔趣阁，使用样例如下：
 
 ```shell
-novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
+.\novel_crawler.exe -f 择日飞升 -u https://www.2biqu.com/biqu5396/
 ```
 
 2. www.bige3.cc 笔趣阁，使用样例如下：
 
 ```shell
-novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
+.\novel_crawler.exe -f 神秘复苏 -u https://www.bige3.cc/book/66/
 ```
 
+3. www.52bqg.org 笔趣阁，使用样例如下：
 
+```shell
+.\novel_crawler.exe -f 深空彼岸 -u https://www.52bqg.org/book_99524/
+```
+
+4. www.ujxsw.net 悠久小说网，使用样例如下：
+
+```shell
+.\novel_crawler.exe -f 我的26岁女房客 -u http://www.ujxsw.net/read/15871/ 
+```
+5. www.tianyabook.com 天涯书库，使用样例如下：
+
+```shell
+.\novel_crawler.exe -f 终极斗罗 -u https://www.tianyabook.com/shu/40027.html
+```
+
+### 第二类网站
+
+1. www.xbiqugeo.com 新笔趣阁，使用样例如下：
+
+```shell
+.\novel_crawler.exe -f 少年歌行 -u https://www.xbiqugeo.com/shu/6420/  
+```
+
+2. www.zrfsxs.com 择日小说网，使用样例如下：
+
+```shell
+.\novel_crawler.exe -f 深空彼岸 -u https://www.zrfsxs.com/xiaoshuo/42/
+```
