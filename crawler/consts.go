@@ -52,9 +52,11 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		ASelector:       "#readerlist > ul > li > a",
 		ContentSelector: ".read-content > p",
 		StrReplace: map[string]string{
-			"<br>": "",
+			"<br>":         "",
+			"<br/>\n<br/>": "",
 		},
 	},
+	// 天涯读书，有一些出版读物
 	"www.tianyabook.com": {
 		ASelector:       ".panel-body > dd > a",
 		ContentSelector: "#htmlContent",

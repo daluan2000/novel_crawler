@@ -30,6 +30,14 @@ func (c *Chapter) Save(f *os.File) error {
 	return err
 }
 
+type ChapterFilter interface {
+	Filter(chapters []Chapter) []Chapter
+}
+
+type NextGetter interface {
+	NextUrl(dom *goquery.Document, selector, subStr string) (*u.URL, error)
+}
+
 type CrawlerInterface interface {
 	// FetchChapterList 获取章节列表
 	FetchChapterList() ([]Chapter, error)
@@ -78,11 +86,13 @@ func CreateCrawler(novelUrlStr string) (CrawlerInterface, error) {
 	if _, ok := BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &BiQuGeCrawler{
 			novelUrl: novelUrl,
+			filter:   &chapterFilterCommon{},
 		}, nil
 	}
 	if _, ok := NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &NewBiQuGeCrawler{
-			novelUrl: novelUrl,
+			novelUrl:   novelUrl,
+			nextGetter: &nextGetterCommon{},
 		}, nil
 	}
 	return nil, errors.New("暂时不支持该网站")

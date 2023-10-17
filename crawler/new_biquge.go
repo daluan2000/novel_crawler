@@ -10,26 +10,8 @@ import (
 // NewBiQuGeCrawler 以新笔趣阁为代表的一系列网站的爬虫器 http://www.xbiqugeo.com/shu/6420/
 // 网站特点是，小说目录和章节内容可能以分页的形式展示
 type NewBiQuGeCrawler struct {
-	novelUrl *url.URL
-}
-
-func (n *NewBiQuGeCrawler) getNext(dom *goquery.Document, selector, subStr string) (*url.URL, error) {
-	nextA := dom.Find(selector)
-	if nextA.Length() == 0 {
-		return nil, nil
-	}
-
-	// nextA是下一页的a标签的元素，bytesA是a标签文本转换为utf-8编码的字写流
-	bytesA, err := GbkToUtf8([]byte(nextA.Text()))
-	if err != nil {
-		return nil, err
-	}
-
-	href, ok := nextA.Attr("href")
-	if strings.Contains(string(bytesA), subStr) && ok {
-		return url.Parse(href)
-	}
-	return nil, nil
+	novelUrl   *url.URL
+	nextGetter NextGetter
 }
 
 func (n *NewBiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
@@ -65,7 +47,8 @@ func (n *NewBiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 
 		// 与“下一页”相关的操作
 		{
-			nextUrl, err := n.getNext(dom, info.ChapterListNextSelector, info.ChapterListNextStr)
+
+			nextUrl, err := n.nextGetter.NextUrl(dom, info.ChapterListNextSelector, info.ChapterListNextStr)
 			if err != nil {
 				return nil, err
 			}
@@ -112,7 +95,7 @@ func (n *NewBiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 
 		// 与“下一页”相关的操作
 		{
-			nextUrl, err := n.getNext(dom, info.ContentNextSelector, info.ContentNextStr)
+			nextUrl, err := n.nextGetter.NextUrl(dom, info.ContentNextSelector, info.ContentNextStr)
 			if err != nil {
 				return err
 			}

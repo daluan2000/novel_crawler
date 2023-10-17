@@ -10,29 +10,7 @@ import (
 // 这类网站的特点：目录页面和章节内容页面均不分页展示，可以很简单地爬取
 type BiQuGeCrawler struct {
 	novelUrl *url.URL
-}
-
-// filterChapter 对爬取到的目录进行一些过滤操作
-// 笔趣阁目录页面，头部有一些章节重复 大概是这种形式 [6, 7, 8, 1, 2, 3, 4, 5, 6, 7, 8]，应该把头三个元素去掉 https://www.52bqg.org/book_128955/
-func (b *BiQuGeCrawler) chapterFilter(chapters []Chapter) []Chapter {
-
-	m := make(map[string]int)
-	for _, i := range chapters {
-		m[i.UrlStr]++
-	}
-
-	idx := 0
-	for ; idx < len(chapters); idx++ {
-		if m[chapters[idx].UrlStr] == 1 {
-			break
-		}
-	}
-
-	chapters = chapters[idx:]
-	for i, _ := range chapters {
-		chapters[i].Number = i + 1
-	}
-	return chapters
+	filter   ChapterFilter
 }
 
 func (b *BiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
@@ -62,7 +40,7 @@ func (b *BiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 
 	})
 
-	r = b.chapterFilter(r)
+	r = b.filter.Filter(r)
 	return r, nil
 }
 
