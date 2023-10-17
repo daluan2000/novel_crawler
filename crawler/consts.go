@@ -67,6 +67,17 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		},
 		RemoveSelector: []string{"p"},
 	},
+	// 同人小说网，二次元书籍
+	"www.trxs.cc": {
+		ASelector:       ".book_list > ul > li > a",
+		ContentSelector: ".read_chapterDetail",
+		StrReplace: map[string]string{
+			"<p>":        "\n",
+			"</p>":       "",
+			"<br/><br/>": "\n",
+		},
+		RemoveSelector: []string{"img"},
+	},
 }
 
 type NewBiQuGeInfo struct {

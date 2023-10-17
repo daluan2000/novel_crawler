@@ -59,7 +59,11 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 ```shell
 .\novel_crawler.exe -f 终极斗罗 -u https://www.tianyabook.com/shu/40027.html
 ```
+6. www.trxs.cc 同人小说网，二次元比较多，使用样例如下：
 
+```shell
+.\novel_crawler.exe -f 我的后桌居然是珈百璃 -u http://www.trxs.cc/tongren/3650.html
+```
 ### 第二类网站
 
 1. www.xbiqugeo.com 新笔趣阁，使用样例如下：
