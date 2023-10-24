@@ -78,6 +78,18 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		},
 		RemoveSelector: []string{"img"},
 	},
+	// 科幻小说网
+	"www.00txt.com": {
+		ASelector:       ".col-lg-9 .list-group > li > a",
+		ContentSelector: "#content",
+		StrReplace: map[string]string{
+			"<p>":   "",
+			"</p>":  "",
+			"<br/>": "",
+			"<br>":  "",
+		},
+		RemoveSelector: []string{"div"},
+	},
 }
 
 type NewBiQuGeInfo struct {
