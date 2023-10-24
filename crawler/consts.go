@@ -80,7 +80,7 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 	},
 	// 科幻小说网
 	"www.00txt.com": {
-		ASelector:       ".col-lg-9 .list-group > li > a",
+		ASelector:       ".list-group > li.vv-book > a",
 		ContentSelector: "#content",
 		StrReplace: map[string]string{
 			"<p>":   "",

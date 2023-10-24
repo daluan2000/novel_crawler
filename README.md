@@ -64,6 +64,13 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 ```shell
 .\novel_crawler.exe -f 我的后桌居然是珈百璃 -u http://www.trxs.cc/tongren/3650.html
 ```
+
+6. www.00txt.com 科幻小说网，出版科幻小说
+
+```shell
+go run .\main.go -u http://www.00txt.com/santi/ -f 三体
+```
+
 ### 第二类网站
 
 1. www.xbiqugeo.com 新笔趣阁，使用样例如下：
