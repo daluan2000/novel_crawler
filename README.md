@@ -84,3 +84,11 @@ go run .\main.go -u http://www.00txt.com/santi/ -f 三体
 ```shell
 .\novel_crawler.exe -f 深空彼岸 -u https://www.zrfsxs.com/xiaoshuo/42/
 ```
+
+3. youyouxs.com 友友小说网
+
+ps：这个网站好像限制ip访问频次，我后面再加个正向代理
+
+```shell
+go run .\main.go -u https://youyouxs.com/xs_350417/zjml_1 -f 超能力者不想受欢迎
+```

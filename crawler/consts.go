@@ -42,9 +42,9 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		ASelector:       "dd > a",
 		ContentSelector: "#content",
 		StrReplace: map[string]string{
-			"\u807d聽聽聽":  "    ",
-			"<br/><br/>": "\n",
-			"<br><br>":   "\n",
+			"\u807d聽聽聽": "    ",
+			"<br/><br/>":   "\n",
+			"<br><br>":     "\n",
 		},
 	},
 
@@ -61,7 +61,7 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		ASelector:       ".panel-body > dd > a",
 		ContentSelector: "#htmlContent",
 		StrReplace: map[string]string{
-			"聽":     "",
+			"聽":    "",
 			"<br>":  "",
 			"<br/>": "",
 		},
@@ -145,5 +145,23 @@ var NewBiQuGeInfoByHost = map[string]NewBiQuGeInfo{
 			"<p>":  "\n    ",
 			"</p>": "",
 		},
+	},
+
+	"youyouxs.com": {
+		ChapterListNextSelector: ".index-container-btn:last-child",
+		ContentNextSelector:     ".bottem1 > a:last-child",
+
+		ASelector:       "a[rel='chapter']",
+		ContentSelector: "#booktxt",
+
+		ChapterListNextStr: "下一页",
+		ContentNextStr:     "下一页",
+
+		StrReplace: map[string]string{
+			"<p>":  "\n    ",
+			"</p>": "",
+		},
+
+		RemoveSelector: []string{"div"},
 	},
 }

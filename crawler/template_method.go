@@ -21,6 +21,7 @@ func (n *nextGetterCommon) NextUrl(dom *goquery.Document, selector, subStr strin
 		return nil, err
 	}
 
+	// 验证a标签的href元素
 	href, ok := nextA.Attr("href")
 	if strings.Contains(string(bytesA), subStr) && ok {
 		return url.Parse(href)
