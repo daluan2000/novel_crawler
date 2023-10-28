@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"novel_crawler/crawler"
 	"testing"
+	"time"
 )
 
 func Test1(t *testing.T) {
@@ -12,6 +13,28 @@ func Test1(t *testing.T) {
 	if newStr, err := crawler.RemoveHtmlElem(str, "div"); err == nil {
 		fmt.Print(newStr)
 	} else {
-		fmt.Println(err.Error())
+		fmt.Println("\nError: " + err.Error())
 	}
+}
+
+type A struct {
+}
+
+func Test2(t *testing.T) {
+	a := &A{}
+	b := &A{}
+	c := &A{}
+
+	fmt.Println(a == b, b == c)
+	fmt.Printf("%p, %p, %p\n", a, b, c) // 删除此行，上一行的输出结果会变化
+}
+
+func deffffer() int {
+	defer time.Sleep(time.Second * 5)
+	return 111
+}
+func Test3(t *testing.T) {
+	fmt.Println(time.Now().String())
+	a := deffffer()
+	fmt.Println(a, time.Now().String())
 }

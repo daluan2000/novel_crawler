@@ -87,8 +87,9 @@ go run .\main.go -u http://www.00txt.com/santi/ -f 三体
 
 3. youyouxs.com 友友小说网
 
-ps：这个网站好像限制ip访问频次，我后面再加个正向代理
+ps：这个网站限制ip访问频次，我没钱买ip池，所以只能限制程序的并发量，爬取速度会比较慢一些
+ps：这个网站会封ip，建议连接手机热点
 
 ```shell
-go run .\main.go -u https://youyouxs.com/xs_350417/zjml_1 -f 超能力者不想受欢迎
+.\novel_crawler.exe -u https://youyouxs.com/xs_350417/zjml_1 -f 超能力者不想受欢迎
 ```

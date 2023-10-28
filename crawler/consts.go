@@ -1,5 +1,9 @@
 package crawler
 
+import (
+	"time"
+)
+
 type BiQuGeInfo struct {
 	ASelector       string
 	ContentSelector string
@@ -42,9 +46,9 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		ASelector:       "dd > a",
 		ContentSelector: "#content",
 		StrReplace: map[string]string{
-			"\u807d聽聽聽": "    ",
-			"<br/><br/>":   "\n",
-			"<br><br>":     "\n",
+			"\u807d聽聽聽":  "    ",
+			"<br/><br/>": "\n",
+			"<br><br>":   "\n",
 		},
 	},
 
@@ -61,7 +65,7 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		ASelector:       ".panel-body > dd > a",
 		ContentSelector: "#htmlContent",
 		StrReplace: map[string]string{
-			"聽":    "",
+			"聽":     "",
 			"<br>":  "",
 			"<br/>": "",
 		},
@@ -163,5 +167,19 @@ var NewBiQuGeInfoByHost = map[string]NewBiQuGeInfo{
 		},
 
 		RemoveSelector: []string{"div"},
+	},
+}
+
+type RequestFrequencyLimit struct {
+	// 并发量限制
+	Concurrent int
+	// 每次请求后线程的休眠时间
+	Gap time.Duration
+}
+
+var RFLimit = map[string]RequestFrequencyLimit{
+	"youyouxs.com": {
+		Concurrent: 1,
+		Gap:        time.Millisecond * 0,
 	},
 }

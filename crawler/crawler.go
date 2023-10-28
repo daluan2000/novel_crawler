@@ -43,14 +43,30 @@ type CrawlerInterface interface {
 	FetchChapterList() ([]Chapter, error)
 	// FetchChapterContent 获取某一章节内容
 	FetchChapterContent(c *Chapter) error
+	// GetUrl 获取url
+	GetUrl() *u.URL
 }
 
 var client = &http.Client{
 	Timeout: time.Second * 10,
 }
 
+// Glc goroutine limit channel 限制并发量
+// Gap 每一次请求的睡眠时间，限制吞吐量
+var Glc = new(chan interface{})
+var Gap = new(time.Duration)
+
 // CreateGoQuery 所有的http请求都通过这里发送
 func CreateGoQuery(urlStr string) (*goquery.Document, error) {
+
+	// 并发限制
+	*Glc <- 1
+	defer func() {
+		if *Gap > 0 {
+			time.Sleep(*Gap)
+		}
+		_ = <-*Glc
+	}()
 
 	req, _ := http.NewRequest("GET", urlStr, nil)
 	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "+
@@ -64,7 +80,7 @@ func CreateGoQuery(urlStr string) (*goquery.Document, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			log.Println(err.Error())
+			log.Println("\nError: " + err.Error())
 		}
 	}(resp.Body)
 	if err != nil {
@@ -76,7 +92,7 @@ func CreateGoQuery(urlStr string) (*goquery.Document, error) {
 
 }
 
-// CreateCrawler 暂时只生产一个类
+// CreateCrawler 暂时只生产两个类
 func CreateCrawler(novelUrlStr string) (CrawlerInterface, error) {
 
 	novelUrl, err := u.Parse(novelUrlStr)

@@ -124,3 +124,7 @@ func (n *NewBiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 
 	return nil
 }
+
+func (n *NewBiQuGeCrawler) GetUrl() *url.URL {
+	return n.novelUrl
+}
