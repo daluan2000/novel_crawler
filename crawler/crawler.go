@@ -48,7 +48,7 @@ type CrawlerInterface interface {
 }
 
 var client = &http.Client{
-	Timeout: time.Second * 10,
+	Timeout: time.Second * 15,
 }
 
 // Glc goroutine limit channel 限制并发量
@@ -80,7 +80,7 @@ func CreateGoQuery(urlStr string) (*goquery.Document, error) {
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			log.Println("\nError: " + err.Error())
+			log.Println("Error: " + err.Error())
 		}
 	}(resp.Body)
 	if err != nil {

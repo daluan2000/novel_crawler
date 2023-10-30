@@ -13,7 +13,8 @@ func Test1(t *testing.T) {
 	if newStr, err := crawler.RemoveHtmlElem(str, "div"); err == nil {
 		fmt.Print(newStr)
 	} else {
-		fmt.Println("\nError: " + err.Error())
+		fmt.Println()
+		fmt.Println("Error: " + err.Error())
 	}
 }
 

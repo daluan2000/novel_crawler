@@ -2,23 +2,22 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"github.com/redmask-hb/GoSimplePrint/goPrint"
+	"github.com/vbauerster/mpb/v8"
+	"github.com/vbauerster/mpb/v8/decor"
 	"log"
 	u "net/url"
 	"novel_crawler/crawler"
 	"os"
-	"sync"
 	"time"
 )
 
 // 目前适配网站 https://www.52bqg.org/book_128955/
 
 func retry(task func() error, count int) error {
-	count--
 	if err := task(); err == nil {
 		return nil
-	} else if count > 0 {
+	} else if count > 1 {
+		//log.Println("do retry, remain retry count:", count-1)
 		return retry(task, count-1)
 	} else {
 		return err
@@ -54,12 +53,6 @@ func doCrawler(urlStr, fileName string) {
 			log.Println("章节列表已获取")
 			log.Println("正在下载章节内容......")
 
-			// 进度条
-			bar := goPrint.NewBar(len(chapters))
-			bar.SetNotice("已下载章节：")
-			bar.SetGraph(">")
-			bar.PrintBar(0)
-
 			// 创建文件
 			file, err := os.Create(fileName)
 			if err != nil {
@@ -68,7 +61,7 @@ func doCrawler(urlStr, fileName string) {
 			defer func(file *os.File) {
 				err := file.Close()
 				if err != nil {
-					log.Println("\nError: " + err.Error())
+					log.Println("Error: " + err.Error() + "\n")
 				}
 			}(file)
 
@@ -79,12 +72,23 @@ func doCrawler(urlStr, fileName string) {
 				glc = make(chan interface{}, rf.Concurrent)
 			}
 
-			w := sync.WaitGroup{}
-			cnt := 0 // 计数器
+			// 进度条，进度条每次输出时，会把上一行消除掉，所以打日志时每行末尾多加一个\n
+			p := mpb.New(mpb.WithWidth(64))
+			bar := p.New(int64(len(chapters)),
+				// BarFillerBuilder with custom style
+				mpb.BarStyle().Lbound("╢").Filler(">").Tip(">").Padding("░").Rbound("╟"),
+				mpb.PrependDecorators(
+					decor.Name("章节", decor.WC{W: len("章节") + 1, C: decor.DidentRight}),
+					decor.Name("下载进度：", decor.WCSyncSpaceR),
+					decor.CountersNoUnit("%d / %d", decor.WCSyncWidth),
+				),
+				mpb.AppendDecorators(
+					decor.OnComplete(decor.Percentage(decor.WC{W: 5}), "done"),
+				),
+			)
 
 			// 爬取每一章节的内容
 			for i := 0; i < len(chapters); i++ {
-				w.Add(1)
 				go func(idx int) {
 					glc <- 1
 					defer func() { _ = <-glc }()
@@ -93,37 +97,34 @@ func doCrawler(urlStr, fileName string) {
 						return c.FetchChapterContent(&chapters[idx])
 					}, 5)
 					if err != nil {
-						log.Println("\nError: " + err.Error())
+						log.Println("Error: " + err.Error() + "\n")
 					}
-					w.Done()
-					cnt++
-					bar.PrintBar(cnt)
+					bar.Increment()
 				}(i)
 
 			}
 
-			w.Wait()
-
-			time.Sleep(time.Millisecond * 100) // 休眠0.1秒，让控制台io同步
-			fmt.Println()
+			p.Wait()
+			time.Sleep(time.Millisecond * 1000) // 休眠0.1秒，让控制台io同步
 			log.Println("所有章节爬取完毕......")
 			log.Println("正在把爬取结果写入文件......")
 			for _, cha := range chapters {
 				err = cha.Save(file)
 				if err != nil {
-					log.Println("\nError: " + err.Error())
+					log.Println("Error: " + err.Error() + "\n")
 				}
 			}
 			log.Println("程序已完成，可以退出")
 		}
 
 	} else {
-		log.Println("\nError: " + err.Error())
+		log.Println("Error: " + err.Error() + "\n")
 	}
 
 }
 
 func main() {
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println("注意，如果程序超过一分钟无响应，请重新执行")
 	var fileName = flag.String("f", "", "保存文件名")
 	var urlStr = flag.String("u", "", "url链接")

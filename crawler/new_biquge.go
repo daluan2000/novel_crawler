@@ -1,6 +1,7 @@
 package crawler
 
 import (
+	"errors"
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/url"
@@ -64,7 +65,9 @@ func (n *NewBiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 		}
 
 	}
-
+	if len(r) == 0 {
+		return nil, errors.New("empty chapter list")
+	}
 	return r, nil
 }
 
@@ -121,7 +124,9 @@ func (n *NewBiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 	for k, v := range info.StrReplace {
 		c.Content = strings.Replace(c.Content, k, v, -1)
 	}
-
+	if len(c.Content) == 0 {
+		return errors.New("empty content of chapter: " + c.Title)
+	}
 	return nil
 }
 

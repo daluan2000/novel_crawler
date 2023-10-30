@@ -27,6 +27,7 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		StrReplace: map[string]string{
 			"\u807d": " ",
 			"<br>":   "",
+			"<br/>":  "",
 		},
 	},
 
