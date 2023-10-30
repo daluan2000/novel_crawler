@@ -7,6 +7,7 @@ import (
 	"log"
 	u "net/url"
 	"novel_crawler/crawler"
+	"novel_crawler/utils"
 	"os"
 	"time"
 )
@@ -50,7 +51,7 @@ func doCrawler(urlStr, fileName string) {
 		log.Println("正在获取章节列表......")
 
 		if chapters, err := c.FetchChapterList(); err == nil {
-			log.Println("章节列表已获取")
+			log.Println(utils.Green("章节列表已获取"))
 			log.Println("正在下载章节内容......")
 
 			// 创建文件
@@ -61,7 +62,7 @@ func doCrawler(urlStr, fileName string) {
 			defer func(file *os.File) {
 				err := file.Close()
 				if err != nil {
-					log.Println("Error: " + err.Error() + "\n")
+					log.Println(utils.Red("Error: " + err.Error() + "\n"))
 				}
 			}(file)
 
@@ -78,9 +79,9 @@ func doCrawler(urlStr, fileName string) {
 				// BarFillerBuilder with custom style
 				mpb.BarStyle().Lbound("╢").Filler(">").Tip(">").Padding("░").Rbound("╟"),
 				mpb.PrependDecorators(
-					decor.Name("章节", decor.WC{W: len("章节") + 1, C: decor.DidentRight}),
-					decor.Name("下载进度：", decor.WCSyncSpaceR),
-					decor.CountersNoUnit("%d / %d", decor.WCSyncWidth),
+					decor.Name(utils.Green("章节下载中......"), decor.WC{W: len("章节下载中......") + 1, C: decor.DidentRight}),
+					decor.Name(utils.Green("进度："), decor.WCSyncSpaceR),
+					decor.CountersNoUnit(utils.Green("%d / %d"), decor.WCSyncWidth),
 				),
 				mpb.AppendDecorators(
 					decor.OnComplete(decor.Percentage(decor.WC{W: 5}), "done"),
@@ -97,7 +98,7 @@ func doCrawler(urlStr, fileName string) {
 						return c.FetchChapterContent(&chapters[idx])
 					}, 5)
 					if err != nil {
-						log.Println("Error: " + err.Error() + "\n")
+						log.Println(utils.Red("Error: " + err.Error() + "\n"))
 					}
 					bar.Increment()
 				}(i)
@@ -106,26 +107,26 @@ func doCrawler(urlStr, fileName string) {
 
 			p.Wait()
 			time.Sleep(time.Millisecond * 1000) // 休眠0.1秒，让控制台io同步
-			log.Println("所有章节爬取完毕......")
+			log.Println(utils.Green("所有章节爬取完毕......"))
 			log.Println("正在把爬取结果写入文件......")
 			for _, cha := range chapters {
 				err = cha.Save(file)
 				if err != nil {
-					log.Println("Error: " + err.Error() + "\n")
+					log.Println(utils.Red("Error: " + err.Error() + "\n"))
 				}
 			}
-			log.Println("程序已完成，可以退出")
+			log.Println(utils.Green("程序已完成，可以退出"))
 		}
 
 	} else {
-		log.Println("Error: " + err.Error() + "\n")
+		log.Println(utils.Red("Error: " + err.Error() + "\n"))
 	}
 
 }
 
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
-	log.Println("注意，如果程序超过一分钟无响应，请重新执行")
+	log.Println(utils.Yellow("注意，如果程序超过一分钟无响应，请重新执行"))
 	var fileName = flag.String("f", "", "保存文件名")
 	var urlStr = flag.String("u", "", "url链接")
 	flag.Parse()
