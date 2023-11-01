@@ -77,7 +77,7 @@ func doCrawler(urlStr, fileName string) {
 			p := mpb.New(mpb.WithWidth(64))
 			bar := p.New(int64(len(chapters)),
 				// BarFillerBuilder with custom style
-				mpb.BarStyle().Lbound("╢").Filler(">").Tip(">").Padding("░").Rbound("╟"),
+				mpb.BarStyle().Lbound("╢").Filler("=").Tip(">").Padding("-").Rbound("╟"),
 				mpb.PrependDecorators(
 					decor.Name(utils.Green("章节下载中......"), decor.WC{W: len("章节下载中......") + 1, C: decor.DidentRight}),
 					decor.Name(utils.Green("进度："), decor.WCSyncSpaceR),
@@ -89,6 +89,7 @@ func doCrawler(urlStr, fileName string) {
 			)
 
 			// 爬取每一章节的内容
+			errChapters := make([]*crawler.Chapter, 0)
 			for i := 0; i < len(chapters); i++ {
 				go func(idx int) {
 					glc <- 1
@@ -99,14 +100,23 @@ func doCrawler(urlStr, fileName string) {
 					}, 5)
 					if err != nil {
 						log.Println(utils.Red("Error: " + err.Error() + "\n"))
+						errChapters = append(errChapters, &chapters[idx])
 					}
 					bar.Increment()
 				}(i)
-
 			}
 
+			// p 内置waitgroup，也就是等待所有程序爬取完毕
 			p.Wait()
 			time.Sleep(time.Millisecond * 1000) // 休眠0.1秒，让控制台io同步
+
+			if len(errChapters) > 0 {
+				log.Println(utils.Red("由于某些原因，以下章节爬取过程出现错误："))
+				for _, ec := range errChapters {
+					log.Println(utils.Red(ec.Title))
+				}
+			}
+
 			log.Println(utils.Green("所有章节爬取完毕......"))
 			log.Println("正在把爬取结果写入文件......")
 			for _, cha := range chapters {
@@ -115,7 +125,7 @@ func doCrawler(urlStr, fileName string) {
 					log.Println(utils.Red("Error: " + err.Error() + "\n"))
 				}
 			}
-			log.Println(utils.Green("程序已完成，可以退出"))
+			log.Println(utils.Green("程序已运行结束"))
 		}
 
 	} else {
@@ -134,5 +144,5 @@ func main() {
 	initConcurrentLimit(*urlStr)
 	doCrawler(*urlStr, *fileName+".txt")
 
-	time.Sleep(time.Hour)
+	time.Sleep(time.Second)
 }

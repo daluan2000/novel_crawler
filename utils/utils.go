@@ -13,6 +13,9 @@ const (
 	textWhite
 )
 
+func Purple(str string) string {
+	return textColor(textPurple, str)
+}
 func Yellow(str string) string {
 	return textColor(textYellow, str)
 }
