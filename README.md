@@ -68,7 +68,13 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 6. www.00txt.com 科幻小说网，出版科幻小说
 
 ```shell
-go run .\main.go -u http://www.00txt.com/santi/ -f 三体
+.\novel_crawler.exe -u http://www.00txt.com/santi/ -f 三体
+```
+
+7. www.1688by.com 好笔阁
+
+```shell
+.\novel_crawler.exe -f 我真不是邪神走狗 -u https://www.1688by.com/book/203501本章未
 ```
 
 ### 第二类网站

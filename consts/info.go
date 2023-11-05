@@ -105,7 +105,7 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 			"<br/>": "",
 			"<br>":  "",
 		},
-		RemoveSelector: []string{"div"},
+		RemoveSelector: []string{"div", "p[style*='color']"},
 	},
 }
 
