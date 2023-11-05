@@ -95,6 +95,18 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		},
 		RemoveSelector: []string{"div"},
 	},
+	// 好笔阁
+	"www.1688by.com": {
+		ASelector:       "#list > dl > a",
+		ContentSelector: "#booktxt",
+		StrReplace: map[string]string{
+			"<p>":   "\n",
+			"</p>":  "",
+			"<br/>": "",
+			"<br>":  "",
+		},
+		RemoveSelector: []string{"div"},
+	},
 }
 
 type NewBiQuGeInfo struct {
