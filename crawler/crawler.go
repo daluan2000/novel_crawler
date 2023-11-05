@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	u "net/url"
+	"novel_crawler/consts"
 	"os"
 	"strings"
 	"time"
@@ -99,13 +100,13 @@ func CreateCrawler(novelUrlStr string) (CrawlerInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, ok := BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+	if _, ok := consts.BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &BiQuGeCrawler{
 			novelUrl: novelUrl,
 			filter:   &chapterFilterCommon{},
 		}, nil
 	}
-	if _, ok := NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+	if _, ok := consts.NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &NewBiQuGeCrawler{
 			novelUrl:   novelUrl,
 			nextGetter: &nextGetterCommon{},

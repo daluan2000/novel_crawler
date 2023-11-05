@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/PuerkitoBio/goquery"
 	"net/url"
+	"novel_crawler/consts"
 	"strings"
 )
 
@@ -23,7 +24,7 @@ func (b *BiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 
 	// 获取章节目录信息
 	r := make([]Chapter, 0)
-	dom.Find(BiQuGeInfoByHost[b.novelUrl.Hostname()].ASelector).Each(func(i int, selection *goquery.Selection) {
+	dom.Find(consts.BiQuGeInfoByHost[b.novelUrl.Hostname()].ASelector).Each(func(i int, selection *goquery.Selection) {
 		// 获取a标签链接
 		if path, ok := selection.Attr("href"); ok {
 			// 把a标签链接转为url
@@ -56,7 +57,7 @@ func (b *BiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 	}
 
 	// 获取章节content
-	c.Content, err = dom.Find(BiQuGeInfoByHost[b.novelUrl.Hostname()].ContentSelector).Html()
+	c.Content, err = dom.Find(consts.BiQuGeInfoByHost[b.novelUrl.Hostname()].ContentSelector).Html()
 	if err != nil {
 		return err
 	}
@@ -69,14 +70,14 @@ func (b *BiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 	}
 
 	// 删除content文本中的某些标签
-	for _, v := range BiQuGeInfoByHost[b.novelUrl.Hostname()].RemoveSelector {
+	for _, v := range consts.BiQuGeInfoByHost[b.novelUrl.Hostname()].RemoveSelector {
 		c.Content, err = RemoveHtmlElem(c.Content, v)
 		if err != nil {
 			return err
 		}
 	}
 	// 对content字符串进行替换
-	rp := BiQuGeInfoByHost[b.novelUrl.Hostname()].StrReplace
+	rp := consts.BiQuGeInfoByHost[b.novelUrl.Hostname()].StrReplace
 	for k, v := range rp {
 		c.Content = strings.Replace(c.Content, k, v, -1)
 	}
