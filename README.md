@@ -81,6 +81,8 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 
 1. www.xbiqugeo.com 新笔趣阁，使用样例如下：
 
+sb网站禁止搜索
+
 ```shell
 .\novel_crawler.exe -f 少年歌行 -u https://www.xbiqugeo.com/shu/6420/  
 ```

@@ -107,6 +107,19 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		},
 		RemoveSelector: []string{"div", "p[style*='color']"},
 	},
+
+	// 好笔阁
+	"www.bixiashenghua.com": {
+		ASelector:       "#list > dl > dd > a",
+		ContentSelector: "#content",
+		StrReplace: map[string]string{
+			"<p>":   "\n",
+			"</p>":  "",
+			"<br/>": "",
+			"<br>":  "",
+		},
+		RemoveSelector: []string{},
+	},
 }
 
 type NewBiQuGeInfo struct {
