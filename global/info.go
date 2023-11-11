@@ -1,4 +1,4 @@
-package consts
+package global
 
 import (
 	"time"
@@ -120,6 +120,20 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		},
 		RemoveSelector: []string{},
 	},
+
+	// 千叶阁 sb网站限制频率
+	"www.qianyege.com": {
+		ASelector:       "#list > dl > dd > a",
+		ContentSelector: "#content",
+		StrReplace: map[string]string{
+			"<p>":   "",
+			"</p>":  "",
+			"<br/>": "",
+			"<br>":  "",
+			"聽":     " ",
+		},
+		RemoveSelector: []string{"div"},
+	},
 }
 
 type NewBiQuGeInfo struct {
@@ -203,9 +217,21 @@ type RequestFrequencyLimit struct {
 	Gap time.Duration
 }
 
+var DefaultRFL = RequestFrequencyLimit{
+	Concurrent: 50,
+	Gap:        time.Millisecond * 0,
+}
 var RFLimit = map[string]RequestFrequencyLimit{
 	"youyouxs.com": {
 		Concurrent: 1,
 		Gap:        time.Millisecond * 0,
+	},
+	"www.qianyege.com": {
+		Concurrent: 4,
+		Gap:        time.Millisecond * 250,
+	},
+	"www.2biqu.com": {
+		Concurrent: 4,
+		Gap:        time.Millisecond * 250,
 	},
 }

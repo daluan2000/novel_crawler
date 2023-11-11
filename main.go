@@ -6,8 +6,8 @@ import (
 	"github.com/vbauerster/mpb/v8/decor"
 	"log"
 	u "net/url"
-	"novel_crawler/consts"
 	"novel_crawler/crawler"
+	"novel_crawler/global"
 	"novel_crawler/utils"
 	"os"
 	"time"
@@ -35,7 +35,7 @@ func initConcurrentLimit(urlStr string) {
 	if err != nil {
 		log.Fatalln("发生致命错误，请输入正确的链接！！")
 	}
-	if rf, ok := consts.RFLimit[url.Hostname()]; ok {
+	if rf, ok := global.RFLimit[url.Hostname()]; ok {
 		glc = make(chan interface{}, rf.Concurrent)
 		gap = rf.Gap
 		log.Printf("该网站对请求频率进行了限制，本程序的并发量限制为%d， 所以耗时会更长一点", rf.Concurrent)
@@ -70,7 +70,7 @@ func doCrawler(urlStr, fileName string) {
 			// 这里也要限制一下并发量，为什么呢，因为有些章节是分页展示的，如果过这里不限制并发量，所有章节的所有页面都随机地获取
 			// 容易出现爬取的页面虽然很多，但爬取的完整章节很少的情况。这时候在前期进度条就会始终显示为0，虽然爬取总时间不变，用户体验感不好。
 			glc := make(chan interface{}, 50)
-			if rf, ok := consts.RFLimit[c.GetUrl().Hostname()]; ok {
+			if rf, ok := global.RFLimit[c.GetUrl().Hostname()]; ok {
 				glc = make(chan interface{}, rf.Concurrent)
 			}
 
@@ -138,9 +138,13 @@ func doCrawler(urlStr, fileName string) {
 func main() {
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println(utils.Yellow("注意，如果程序超过一分钟无响应，请重新执行"))
+
 	var fileName = flag.String("f", "", "保存文件名")
 	var urlStr = flag.String("u", "", "url链接")
+	var saveTitle = flag.Int("st", 1, "保存tittle为1，不保存title为2，不输入该参数默认为1")
+
 	flag.Parse()
+	global.SaveTitle = *saveTitle == 1
 
 	initConcurrentLimit(*urlStr)
 	doCrawler(*urlStr, *fileName+".txt")

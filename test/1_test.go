@@ -3,6 +3,7 @@ package test
 import (
 	"fmt"
 	"novel_crawler/crawler"
+	"novel_crawler/utils"
 	"testing"
 	"time"
 )
@@ -35,7 +36,7 @@ func deffffer() int {
 	return 111
 }
 func Test3(t *testing.T) {
-	fmt.Println(time.Now().String())
-	a := deffffer()
-	fmt.Println(a, time.Now().String())
+	for i := 0; i < 10; i++ {
+		fmt.Println(utils.RandomUserAgent())
+	}
 }

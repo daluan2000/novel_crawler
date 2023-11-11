@@ -11,7 +11,8 @@ import (
 	"log"
 	"net/http"
 	u "net/url"
-	"novel_crawler/consts"
+	"novel_crawler/global"
+	"novel_crawler/utils"
 	"os"
 	"strings"
 	"time"
@@ -27,7 +28,13 @@ type Chapter struct {
 }
 
 func (c *Chapter) Save(f *os.File) error {
-	_, err := f.WriteString(fmt.Sprintf("%s\n%s\n", c.Title, c.Content))
+	str := ""
+	if global.SaveTitle {
+		str = fmt.Sprintf("%s\n%s\n", c.Title, c.Content)
+	} else {
+		str = fmt.Sprintf("%s\n", c.Content)
+	}
+	_, err := f.WriteString(str)
 	return err
 }
 
@@ -48,10 +55,6 @@ type CrawlerInterface interface {
 	GetUrl() *u.URL
 }
 
-var client = &http.Client{
-	Timeout: time.Second * 15,
-}
-
 // Glc goroutine limit channel 限制并发量
 // Gap 每一次请求的睡眠时间，限制吞吐量
 var Glc = new(chan interface{})
@@ -59,6 +62,10 @@ var Gap = new(time.Duration)
 
 // CreateGoQuery 所有的http请求都通过这里发送
 func CreateGoQuery(urlStr string) (*goquery.Document, error) {
+
+	var client = &http.Client{
+		Timeout: time.Second * 15,
+	}
 
 	// 并发限制
 	*Glc <- 1
@@ -70,8 +77,7 @@ func CreateGoQuery(urlStr string) (*goquery.Document, error) {
 	}()
 
 	req, _ := http.NewRequest("GET", urlStr, nil)
-	req.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "+
-		"(KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36 Edg/117.0.2045.60")
+	req.Header.Set("User-Agent", utils.RandomUserAgent())
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -100,13 +106,13 @@ func CreateCrawler(novelUrlStr string) (CrawlerInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, ok := consts.BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+	if _, ok := global.BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &BiQuGeCrawler{
 			novelUrl: novelUrl,
 			filter:   &chapterFilterCommon{},
 		}, nil
 	}
-	if _, ok := consts.NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+	if _, ok := global.NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &NewBiQuGeCrawler{
 			novelUrl:   novelUrl,
 			nextGetter: &nextGetterCommon{},

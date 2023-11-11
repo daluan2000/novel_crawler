@@ -3,6 +3,7 @@ module novel_crawler
 go 1.21
 
 require (
+	github.com/EDDYCJY/fake-useragent v0.2.0
 	github.com/PuerkitoBio/goquery v1.8.1
 	github.com/vbauerster/mpb/v8 v8.6.2
 	golang.org/x/text v0.7.0
