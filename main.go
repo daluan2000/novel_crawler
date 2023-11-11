@@ -27,22 +27,24 @@ func retry(task func() error, count int) error {
 
 }
 
+func getRFL(hostName string) (chan interface{}, time.Duration) {
+
+	if rfl, ok := global.RFLimit[hostName]; ok {
+		return make(chan interface{}, rfl.Concurrent), rfl.Gap
+	}
+	return make(chan interface{}, global.DefaultRFL.Concurrent), global.DefaultRFL.Gap
+}
+
 func initConcurrentLimit(urlStr string) {
-	glc := make(chan interface{}, 50)
-	gap := time.Millisecond * 0
 
 	url, err := u.Parse(urlStr)
 	if err != nil {
 		log.Fatalln("发生致命错误，请输入正确的链接！！")
 	}
-	if rf, ok := global.RFLimit[url.Hostname()]; ok {
-		glc = make(chan interface{}, rf.Concurrent)
-		gap = rf.Gap
-		log.Printf("该网站对请求频率进行了限制，本程序的并发量限制为%d， 所以耗时会更长一点", rf.Concurrent)
-	}
+	crawler.Glc, crawler.Gap = getRFL(url.Hostname())
 
-	*crawler.Glc = glc
-	*crawler.Gap = gap
+	log.Printf("本网站爬虫并发量限制为%d", cap(crawler.Glc))
+
 }
 
 // doCrawler 控制爬取流程
@@ -69,10 +71,7 @@ func doCrawler(urlStr, fileName string) {
 
 			// 这里也要限制一下并发量，为什么呢，因为有些章节是分页展示的，如果过这里不限制并发量，所有章节的所有页面都随机地获取
 			// 容易出现爬取的页面虽然很多，但爬取的完整章节很少的情况。这时候在前期进度条就会始终显示为0，虽然爬取总时间不变，用户体验感不好。
-			glc := make(chan interface{}, 50)
-			if rf, ok := global.RFLimit[c.GetUrl().Hostname()]; ok {
-				glc = make(chan interface{}, rf.Concurrent)
-			}
+			glc, _ := getRFL(c.GetUrl().Hostname())
 
 			// 进度条，进度条每次输出时，会把上一行消除掉，所以打日志时每行末尾多加一个\n
 			p := mpb.New(mpb.WithWidth(64))

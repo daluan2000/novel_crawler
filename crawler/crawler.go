@@ -57,8 +57,8 @@ type CrawlerInterface interface {
 
 // Glc goroutine limit channel 限制并发量
 // Gap 每一次请求的睡眠时间，限制吞吐量
-var Glc = new(chan interface{})
-var Gap = new(time.Duration)
+var Glc chan interface{}
+var Gap time.Duration
 
 // CreateGoQuery 所有的http请求都通过这里发送
 func CreateGoQuery(urlStr string) (*goquery.Document, error) {
@@ -68,12 +68,12 @@ func CreateGoQuery(urlStr string) (*goquery.Document, error) {
 	}
 
 	// 并发限制
-	*Glc <- 1
+	Glc <- 1
 	defer func() {
-		if *Gap > 0 {
-			time.Sleep(*Gap)
+		if Gap > 0 {
+			time.Sleep(Gap)
 		}
-		_ = <-*Glc
+		_ = <-Glc
 	}()
 
 	req, _ := http.NewRequest("GET", urlStr, nil)
