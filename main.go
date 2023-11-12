@@ -135,6 +135,9 @@ func doCrawler(urlStr, fileName string) {
 }
 
 func main() {
+	//gui.Start()
+	//time.Sleep(time.Hour)
+
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println(utils.Yellow("注意，如果程序超过一分钟无响应，请重新执行"))
 
