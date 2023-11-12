@@ -1,9 +1,11 @@
 package test
 
 import (
+	"encoding/json"
 	"fmt"
 	"novel_crawler/crawler"
-	"novel_crawler/utils"
+	"novel_crawler/global"
+	"os"
 	"testing"
 	"time"
 )
@@ -36,7 +38,8 @@ func deffffer() int {
 	return 111
 }
 func Test3(t *testing.T) {
-	for i := 0; i < 10; i++ {
-		fmt.Println(utils.RandomUserAgent())
-	}
+	f, _ := os.Create("biquge.json")
+	bts, _ := json.Marshal(global.BiQuGeInfoByHost)
+	str := string(bts)
+	f.WriteString(str)
 }
