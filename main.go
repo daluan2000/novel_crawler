@@ -9,6 +9,7 @@ import (
 	"novel_crawler/crawler"
 	"novel_crawler/global"
 	"novel_crawler/utils"
+	"novel_crawler/utils/config_manager"
 	"os"
 	"time"
 )
@@ -133,13 +134,61 @@ func doCrawler(urlStr, fileName string) {
 	}
 
 }
+func readYaml() {
+	cm, err := config_manager.CreateConfigManager("yaml", []string{"../", "./"}, global.WebInfoFileName)
+	if err != nil {
+		log.Println(utils.Yellow(global.WebInfoFileName + ".yml文件不存在或解析出现了错误，本次爬取使用默认配置。" + err.Error()))
+		return
+	}
 
+	var uf = cm.GetBool("UseFlag")
+	if !uf {
+		log.Println(utils.Yellow("UseFlag=false，本次爬取使用默认配置"))
+		return
+	}
+
+	log.Println(utils.Yellow("本次爬取使用自定义配置文件"))
+
+	var bqg map[string]global.BiQuGeInfo
+	var nbqg map[string]global.NewBiQuGeInfo
+	var rfl map[string]global.RequestFrequencyLimit
+
+	if cm.Get("BiQuGeInfoByHost") != nil {
+		if err = cm.UnmarshalKey("BiQuGeInfoByHost", &bqg); err == nil {
+			for k, v := range bqg {
+				global.BiQuGeInfoByHost[k] = v
+			}
+		} else {
+			log.Println(utils.Red("BiQuGeInfoByHost配置格式错误" + err.Error()))
+		}
+	}
+
+	if cm.Get("NewBiQuGeInfoByHost") != nil {
+		if err = cm.UnmarshalKey("NewBiQuGeInfoByHost", &nbqg); err == nil {
+			for k, v := range nbqg {
+				global.NewBiQuGeInfoByHost[k] = v
+			}
+		} else {
+			log.Println(utils.Red("NewBiQuGeInfoByHost配置格式错误" + err.Error()))
+		}
+	}
+
+	if cm.Get("RFLimit") != nil {
+		if err = cm.UnmarshalKey("RFLimit", &rfl); err == nil {
+			for k, v := range rfl {
+				global.RFLimit[k] = v
+			}
+		} else {
+			log.Println(utils.Red("RFLimit配置格式错误" + err.Error()))
+		}
+	}
+}
 func main() {
-	//gui.Start()
-	//time.Sleep(time.Hour)
 
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println(utils.Yellow("注意，如果程序超过一分钟无响应，请重新执行"))
+
+	readYaml()
 
 	var fileName = flag.String("f", "", "保存文件名")
 	var urlStr = flag.String("u", "", "url链接")
