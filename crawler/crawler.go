@@ -11,7 +11,7 @@ import (
 	"log"
 	"net/http"
 	u "net/url"
-	"novel_crawler/global"
+	"novel_crawler/my_global"
 	"novel_crawler/utils"
 	"os"
 	"strings"
@@ -29,7 +29,7 @@ type Chapter struct {
 
 func (c *Chapter) Save(f *os.File) error {
 	str := ""
-	if global.SaveTitle {
+	if my_global.SaveTitle {
 		str = fmt.Sprintf("%s\n%s\n", c.Title, c.Content)
 	} else {
 		str = fmt.Sprintf("%s\n", c.Content)
@@ -62,6 +62,8 @@ var Gap time.Duration
 
 // CreateGoQuery 所有的http请求都通过这里发送
 func CreateGoQuery(urlStr string) (*goquery.Document, error) {
+
+	my_global.RequestCount++
 
 	var client = &http.Client{
 		Timeout: time.Second * 15,
@@ -106,13 +108,13 @@ func CreateCrawler(novelUrlStr string) (CrawlerInterface, error) {
 	if err != nil {
 		return nil, err
 	}
-	if _, ok := global.BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+	if _, ok := my_global.BiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &BiQuGeCrawler{
 			novelUrl: novelUrl,
 			filter:   &chapterFilterCommon{},
 		}, nil
 	}
-	if _, ok := global.NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+	if _, ok := my_global.NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
 		return &NewBiQuGeCrawler{
 			novelUrl:   novelUrl,
 			nextGetter: &nextGetterCommon{},

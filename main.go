@@ -7,7 +7,7 @@ import (
 	"log"
 	u "net/url"
 	"novel_crawler/crawler"
-	"novel_crawler/global"
+	"novel_crawler/my_global"
 	"novel_crawler/utils"
 	"novel_crawler/utils/config_manager"
 	"os"
@@ -30,10 +30,10 @@ func retry(task func() error, count int) error {
 
 func getRFL(hostName string) (chan interface{}, time.Duration) {
 
-	if rfl, ok := global.RFLimit[hostName]; ok {
+	if rfl, ok := my_global.RFLimit[hostName]; ok {
 		return make(chan interface{}, rfl.Concurrent), rfl.Gap
 	}
-	return make(chan interface{}, global.DefaultRFL.Concurrent), global.DefaultRFL.Gap
+	return make(chan interface{}, my_global.DefaultRFL.Concurrent), my_global.DefaultRFL.Gap
 }
 
 func initConcurrentLimit(urlStr string) {
@@ -126,7 +126,6 @@ func doCrawler(urlStr, fileName string) {
 					log.Println(utils.Red("Error: " + err.Error() + "\n"))
 				}
 			}
-			log.Println(utils.Green("程序已运行结束"))
 		}
 
 	} else {
@@ -135,9 +134,9 @@ func doCrawler(urlStr, fileName string) {
 
 }
 func readYaml() {
-	cm, err := config_manager.CreateConfigManager("yaml", []string{"../", "./"}, global.WebInfoFileName)
+	cm, err := config_manager.CreateConfigManager("yaml", []string{"../", "./"}, my_global.WebInfoFileName)
 	if err != nil {
-		log.Println(utils.Yellow(global.WebInfoFileName + ".yml文件不存在或解析出现了错误，本次爬取使用默认配置。" + err.Error()))
+		log.Println(utils.Yellow(my_global.WebInfoFileName + ".yml文件不存在或解析出现了错误，本次爬取使用默认配置。" + err.Error()))
 		return
 	}
 
@@ -149,14 +148,14 @@ func readYaml() {
 
 	log.Println(utils.Yellow("本次爬取使用自定义配置文件"))
 
-	var bqg map[string]global.BiQuGeInfo
-	var nbqg map[string]global.NewBiQuGeInfo
-	var rfl map[string]global.RequestFrequencyLimit
+	var bqg map[string]my_global.BiQuGeInfo
+	var nbqg map[string]my_global.NewBiQuGeInfo
+	var rfl map[string]my_global.RequestFrequencyLimit
 
 	if cm.Get("BiQuGeInfoByHost") != nil {
 		if err = cm.UnmarshalKey("BiQuGeInfoByHost", &bqg); err == nil {
 			for k, v := range bqg {
-				global.BiQuGeInfoByHost[k] = v
+				my_global.BiQuGeInfoByHost[k] = v
 			}
 		} else {
 			log.Println(utils.Red("BiQuGeInfoByHost配置格式错误" + err.Error()))
@@ -166,7 +165,7 @@ func readYaml() {
 	if cm.Get("NewBiQuGeInfoByHost") != nil {
 		if err = cm.UnmarshalKey("NewBiQuGeInfoByHost", &nbqg); err == nil {
 			for k, v := range nbqg {
-				global.NewBiQuGeInfoByHost[k] = v
+				my_global.NewBiQuGeInfoByHost[k] = v
 			}
 		} else {
 			log.Println(utils.Red("NewBiQuGeInfoByHost配置格式错误" + err.Error()))
@@ -176,7 +175,7 @@ func readYaml() {
 	if cm.Get("RFLimit") != nil {
 		if err = cm.UnmarshalKey("RFLimit", &rfl); err == nil {
 			for k, v := range rfl {
-				global.RFLimit[k] = v
+				my_global.RFLimit[k] = v
 			}
 		} else {
 			log.Println(utils.Red("RFLimit配置格式错误" + err.Error()))
@@ -184,6 +183,13 @@ func readYaml() {
 	}
 }
 func main() {
+
+	my_global.StartTime = time.Now().UnixNano()
+	defer func() {
+		dur := time.Now().UnixNano() - my_global.StartTime
+		log.Printf(utils.Green("程序运行结束，耗时%dmin%ds，共发起%d次请求"),
+			dur/time.Minute.Nanoseconds(), dur%time.Minute.Nanoseconds()/time.Second.Nanoseconds(), my_global.RequestCount)
+	}()
 
 	log.SetFlags(log.LstdFlags | log.Lshortfile)
 	log.Println(utils.Yellow("注意，如果程序超过一分钟无响应，请重新执行"))
@@ -195,7 +201,7 @@ func main() {
 	var saveTitle = flag.Int("st", 1, "保存tittle为1，不保存title为2，不输入该参数默认为1")
 
 	flag.Parse()
-	global.SaveTitle = *saveTitle == 1
+	my_global.SaveTitle = *saveTitle == 1
 
 	initConcurrentLimit(*urlStr)
 	doCrawler(*urlStr, *fileName+".txt")

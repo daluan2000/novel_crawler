@@ -95,9 +95,12 @@ sb网站禁止搜索
 
 3. youyouxs.com 友友小说网
 
-ps：这个网站限制ip访问频次，我没钱买ip池，所以只能限制程序的并发量，爬取速度会比较慢一些
-ps：这个网站会封ip，建议连接手机热点
-
 ```shell
 .\novel_crawler.exe -u https://youyouxs.com/xs_350417/zjml_1 -f 超能力者不想受欢迎
+```
+
+4. www.biqge.org 笔奇阁
+
+```shell
+.\novel_crawler.exe -u https://www.biqge.org/book/17130/ -f 修仙就是这样的
 ```

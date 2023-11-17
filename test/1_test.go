@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"novel_crawler/crawler"
-	"novel_crawler/global"
+	"novel_crawler/my_global"
 	"os"
 	"testing"
 	"time"
@@ -39,7 +39,7 @@ func deffffer() int {
 }
 func Test3(t *testing.T) {
 	f, _ := os.Create("biquge.json")
-	bts, _ := json.Marshal(global.BiQuGeInfoByHost)
+	bts, _ := json.Marshal(my_global.BiQuGeInfoByHost)
 	str := string(bts)
 	f.WriteString(str)
 }

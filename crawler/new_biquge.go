@@ -5,7 +5,7 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	"log"
 	"net/url"
-	"novel_crawler/global"
+	"novel_crawler/my_global"
 	"strings"
 )
 
@@ -26,7 +26,7 @@ func (n *NewBiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
 	}
 
 	r := make([]Chapter, 0)
-	info := global.NewBiQuGeInfoByHost[n.novelUrl.Hostname()]
+	info := my_global.NewBiQuGeInfoByHost[n.novelUrl.Hostname()]
 
 	for {
 		// 把当前页包含的章节存起来
@@ -80,7 +80,7 @@ func (n *NewBiQuGeCrawler) FetchChapterContent(c *Chapter) error {
 		return err
 	}
 
-	info := global.NewBiQuGeInfoByHost[n.novelUrl.Hostname()]
+	info := my_global.NewBiQuGeInfoByHost[n.novelUrl.Hostname()]
 
 	for {
 		// 获取章节content
