@@ -91,7 +91,9 @@ func doCrawler(urlStr, fileName string) {
 
 			// 爬取每一章节的内容
 			errChapters := make([]*crawler.Chapter, 0)
+			saveChan := make([]chan interface{}, len(chapters))
 			for i := 0; i < len(chapters); i++ {
+				saveChan[i] = make(chan interface{}, 1)
 				go func(idx int) {
 					glc <- 1
 					defer func() { _ = <-glc }()
@@ -103,13 +105,22 @@ func doCrawler(urlStr, fileName string) {
 						log.Println(utils.Red("Error: " + err.Error() + "\n"))
 						errChapters = append(errChapters, &chapters[idx])
 					}
+
+					saveChan[idx] <- 1
 					bar.Increment()
 				}(i)
 			}
 
-			// p 内置waitgroup，也就是等待所有程序爬取完毕
-			p.Wait()
-			time.Sleep(time.Millisecond * 1000) // 休眠0.1秒，让控制台io同步
+			// 按顺序保存各个章节内容
+			for i := 0; i < len(chapters); i++ {
+				_ = <-saveChan[i]
+				err = chapters[i].Save(file)
+				if err != nil {
+					log.Println(utils.Red("Error: " + err.Error() + "\n"))
+				}
+			}
+
+			p.Wait() // 不加这一个，io会不同步
 
 			if len(errChapters) > 0 {
 				log.Println(utils.Red("由于某些原因，以下章节爬取过程出现错误："))
@@ -119,13 +130,7 @@ func doCrawler(urlStr, fileName string) {
 			}
 
 			log.Println(utils.Green("所有章节爬取完毕......"))
-			log.Println("正在把爬取结果写入文件......")
-			for _, cha := range chapters {
-				err = cha.Save(file)
-				if err != nil {
-					log.Println(utils.Red("Error: " + err.Error() + "\n"))
-				}
-			}
+
 		}
 
 	} else {
