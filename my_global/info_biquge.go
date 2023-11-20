@@ -141,4 +141,19 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		},
 		RemoveSelector: []string{},
 	},
+
+	"www.wbsz.org": {
+		ASelector:       ".chapter > ul > li > a",
+		ContentSelector: ".readerCon",
+		StrReplace: map[string]string{
+			"<br/>":   "",
+			"<br>":    "",
+			"<p>":     "",
+			"</p>":    "",
+			"<span>":  "",
+			"</span>": "",
+			"聽":       " ",
+		},
+		RemoveSelector: []string{"script"},
+	},
 }

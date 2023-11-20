@@ -77,6 +77,11 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 .\novel_crawler.exe -f 我真不是邪神走狗 -u https://www.1688by.com/book/203501本章未
 ```
 
+8. www.wbsz.org 完本神站
+
+```shell
+go run .\main.go -f 优等生不需要超能力 -u https://www.wbsz.org/18874/
+```
 ### 第二类网站
 
 1. www.xbiqugeo.com 新笔趣阁，使用样例如下：

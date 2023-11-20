@@ -30,7 +30,7 @@ type Chapter struct {
 func (c *Chapter) Save(f *os.File) error {
 	str := ""
 	if my_global.SaveTitle {
-		str = fmt.Sprintf("%s\n%s\n", c.Title, c.Content)
+		str = fmt.Sprintf("%s\n%s\n%s\n", c.Title, "    支持正版，人人有责", c.Content)
 	} else {
 		str = fmt.Sprintf("%s\n", c.Content)
 	}
