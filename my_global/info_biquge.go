@@ -156,4 +156,18 @@ var BiQuGeInfoByHost = map[string]BiQuGeInfo{
 		},
 		RemoveSelector: []string{"script"},
 	},
+	"www.beqege.com": {
+		ASelector:       "#list > dl > dd > a",
+		ContentSelector: "#content",
+		StrReplace: map[string]string{
+			"<br/>":   "",
+			"<br>":    "",
+			"<p>":     "",
+			"</p>":    "",
+			"<span>":  "",
+			"</span>": "",
+			"聽":       " ",
+		},
+		RemoveSelector: []string{},
+	},
 }

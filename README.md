@@ -74,7 +74,7 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 7. www.1688by.com 好笔阁
 
 ```shell
-.\novel_crawler.exe -f 我真不是邪神走狗 -u https://www.1688by.com/book/203501本章未
+.\novel_crawler.exe -f 我真不是邪神走狗 -u https://www.1688by.com/book/203501
 ```
 
 8. www.wbsz.org 完本神站

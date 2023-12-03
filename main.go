@@ -25,7 +25,6 @@ func retry(task func() error, count int) error {
 	} else {
 		return err
 	}
-
 }
 
 func getRFL(hostName string) (chan interface{}, time.Duration) {
@@ -44,17 +43,29 @@ func initConcurrentLimit(urlStr string) {
 	}
 	crawler.Glc, crawler.Gap = getRFL(url.Hostname())
 
-	log.Printf("本网站爬虫并发量限制为%d", cap(crawler.Glc))
+}
 
+func fetchChapterListWrapper(c crawler.CrawlerInterface) ([]crawler.Chapter, error) {
+	chapters := make([]crawler.Chapter, 0)
+
+	err := retry(func() error {
+		var err1 error
+		chapters, err1 = c.FetchChapterList()
+		return err1
+	}, 5)
+
+	return chapters, err
 }
 
 // doCrawler 控制爬取流程
 func doCrawler(urlStr, fileName string) {
 	if c, err := crawler.CreateCrawler(urlStr); err == nil {
 
+		log.Printf("本网站爬虫并发量限制为%d", cap(crawler.Glc))
+
 		log.Println("正在获取章节列表......")
 
-		if chapters, err := c.FetchChapterList(); err == nil {
+		if chapters, err := fetchChapterListWrapper(c); err == nil {
 			log.Println(utils.Green("章节列表已获取"))
 			log.Println("正在下载章节内容......")
 

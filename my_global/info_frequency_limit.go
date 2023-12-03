@@ -34,4 +34,8 @@ var RFLimit = map[string]RequestFrequencyLimit{
 		Concurrent: 10,
 		Gap:        time.Millisecond * 250,
 	},
+	"www.beqege.com": {
+		Concurrent: 10,
+		Gap:        time.Millisecond * 250,
+	},
 }
