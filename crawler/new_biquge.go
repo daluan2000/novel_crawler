@@ -3,7 +3,6 @@ package crawler
 import (
 	"errors"
 	"github.com/PuerkitoBio/goquery"
-	"log"
 	"net/url"
 	"novel_crawler/my_global"
 	"strings"
@@ -17,7 +16,6 @@ type NewBiQuGeCrawler struct {
 }
 
 func (n *NewBiQuGeCrawler) FetchChapterList() ([]Chapter, error) {
-	log.Println("该网站章节是分页展示的，需要更长的时间爬取，大概需要几十秒的时间......")
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := CreateGoQuery(n.novelUrl.String())

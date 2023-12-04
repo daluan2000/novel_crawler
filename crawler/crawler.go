@@ -115,6 +115,7 @@ func CreateCrawler(novelUrlStr string) (CrawlerInterface, error) {
 		}, nil
 	}
 	if _, ok := my_global.NewBiQuGeInfoByHost[novelUrl.Hostname()]; ok {
+		log.Println("该网站章节是分页展示的，需要更长的时间爬取，大概需要几十秒的时间......")
 		return &NewBiQuGeCrawler{
 			novelUrl:   novelUrl,
 			nextGetter: &nextGetterCommon{},
