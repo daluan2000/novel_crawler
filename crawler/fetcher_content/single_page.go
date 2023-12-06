@@ -3,7 +3,7 @@ package fetcher_content
 import (
 	"errors"
 	"novel_crawler/crawler/chapter"
-	"novel_crawler/crawler/http_query"
+	"novel_crawler/crawler/requester/requester_interf"
 	"novel_crawler/my_global"
 	"novel_crawler/utils"
 	"strings"
@@ -15,7 +15,7 @@ type SinglePageFetcher struct {
 func (s *SinglePageFetcher) FetchChapterContent(c chapter.Chapter) error {
 
 	// 这里根据c.Url创建query
-	var query http_query.Query
+	var query requester_interf.Requester
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := query.CreateGoQuery(c.Url)

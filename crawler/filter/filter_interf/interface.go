@@ -1,4 +1,4 @@
-package filter
+package filter_interf
 
 import "novel_crawler/crawler/chapter"
 

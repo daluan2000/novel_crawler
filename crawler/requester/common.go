@@ -1,4 +1,4 @@
-package http_query
+package requester
 
 import (
 	"github.com/PuerkitoBio/goquery"

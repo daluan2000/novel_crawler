@@ -1,4 +1,4 @@
-package fetcher_list
+package fetcher_list_interf
 
 import (
 	"novel_crawler/crawler/chapter"

@@ -1,10 +1,10 @@
-package http_query
+package requester_interf
 
 import (
 	"github.com/PuerkitoBio/goquery"
 	u "net/url"
 )
 
-type Query interface {
+type Requester interface {
 	CreateGoQuery(url *u.URL) (*goquery.Document, error)
 }

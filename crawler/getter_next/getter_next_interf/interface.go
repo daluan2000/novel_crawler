@@ -1,4 +1,4 @@
-package getter_next
+package getter_next_interf
 
 import (
 	"github.com/PuerkitoBio/goquery"

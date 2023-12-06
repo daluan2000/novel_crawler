@@ -3,8 +3,8 @@ package fetcher_content
 import (
 	"errors"
 	"novel_crawler/crawler/chapter"
-	"novel_crawler/crawler/getter_next"
-	"novel_crawler/crawler/http_query"
+	"novel_crawler/crawler/getter_next/getter_next_interf"
+	"novel_crawler/crawler/requester/requester_interf"
 	"novel_crawler/my_global"
 	"novel_crawler/utils"
 	"strings"
@@ -16,8 +16,8 @@ type MultiPageFetcher struct {
 func (m *MultiPageFetcher) Fetch(c *chapter.Chapter) error {
 
 	// 这里根据c.Url创建query和getter
-	var query http_query.Query
-	var getter getter_next.Getter
+	var query requester_interf.Requester
+	var getter getter_next_interf.Getter
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := query.CreateGoQuery(c.Url)
