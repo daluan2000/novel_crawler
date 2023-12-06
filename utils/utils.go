@@ -86,3 +86,14 @@ func RemoveHtmlElem(str, selector string) (string, error) {
 	res = res[25 : len(res)-14]
 	return res, nil
 }
+
+func HtmlToText(str string) (string, error) {
+	dom, err := goquery.NewDocumentFromReader(strings.NewReader(str))
+	if err != nil {
+		return "", err
+	}
+
+	res := dom.Text()
+
+	return res, nil
+}
