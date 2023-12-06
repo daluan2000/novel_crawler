@@ -28,6 +28,11 @@ type Chapter struct {
 }
 
 func (c *Chapter) Save(f *os.File) error {
+
+	// 去除所有空格
+	c.Title = strings.Replace(c.Title, " ", "", -1)
+	c.Content = strings.Replace(c.Content, " ", "", -1)
+
 	str := ""
 	if my_global.SaveTitle {
 		str = fmt.Sprintf("%s\n%s\n%s\n", c.Title, "    支持正版，人人有责", c.Content)
