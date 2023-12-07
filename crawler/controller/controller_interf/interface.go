@@ -1,4 +1,10 @@
 package controller_interf
 
-type Interface interface {
+import u "net/url"
+
+type Controller interface {
+}
+
+type Factory interface {
+	CreateController(url *u.URL) Controller
 }

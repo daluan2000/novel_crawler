@@ -8,3 +8,6 @@ import (
 type Getter interface {
 	NextUrl(dom *goquery.Document) (*u.URL, error)
 }
+type Factory interface {
+	CreateGetter(url *u.URL) Getter
+}
