@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"novel_crawler/crawler"
 	"novel_crawler/my_global"
+	"novel_crawler/utils"
 	"os"
 	"testing"
 	"time"
@@ -42,4 +43,10 @@ func Test3(t *testing.T) {
 	bts, _ := json.Marshal(my_global.BiQuGeInfoByHost)
 	str := string(bts)
 	f.WriteString(str)
+}
+
+func Test4(t *testing.T) {
+	s := "  2234 "
+	s = utils.RemovePreSufBlank(s)
+	fmt.Println(s)
 }

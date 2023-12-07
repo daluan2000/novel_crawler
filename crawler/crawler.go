@@ -3,7 +3,6 @@ package crawler
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
@@ -29,17 +28,22 @@ type Chapter struct {
 
 func (c *Chapter) Save(f *os.File) error {
 
-	// 去除所有空格
-	c.Title = strings.Replace(c.Title, " ", "", -1)
-	c.Content = strings.Replace(c.Content, " ", "", -1)
-
-	str := ""
-	if my_global.SaveTitle {
-		str = fmt.Sprintf("%s\n%s\n%s\n", c.Title, "    支持正版，人人有责", c.Content)
-	} else {
-		str = fmt.Sprintf("%s\n", c.Content)
+	// 去除每行开头结尾所有空字符
+	c.Title = utils.RemovePreSufBlank(c.Title)
+	cls := strings.Split(c.Content, "\n")
+	for k, _ := range cls {
+		cls[k] = utils.RemovePreSufBlank(cls[k])
 	}
-	_, err := f.WriteString(str)
+	c.Content = "支持正版，人人有责\n" + strings.Join(cls, "\n")
+
+	//生成写入文件的str
+	wStr := c.Content + "\n"
+	if my_global.SaveTitle {
+		wStr = c.Title + "\n" + wStr
+	}
+	wStr = strings.Replace(wStr, " ", "", -1)
+
+	_, err := f.WriteString(wStr)
 	return err
 }
 
