@@ -3,6 +3,7 @@ package utils
 import (
 	"fmt"
 	"math/rand"
+	"slices"
 )
 
 const (
@@ -46,4 +47,33 @@ func RandomUserAgent() string {
 	// 推荐使用
 	idx := rand.Int() % len(userAgents)
 	return userAgents[idx]
+}
+
+func RemovePreBlank(s string) string {
+	blanks := []string{" ", "\r", "\n", "\t", "\v", "\f"}
+	i := 0
+	for i < len(s) {
+		if slices.Contains(blanks, s[i:i+1]) {
+			i++
+		} else {
+			break
+		}
+	}
+	return s[i:]
+}
+func RemoveSufBlank(s string) string {
+	blanks := []string{" ", "\r", "\n", "\t", "\v", "\f"}
+	i := len(s) - 1
+	for i >= 0 {
+		if slices.Contains(blanks, s[i:i+1]) {
+			i--
+		} else {
+			break
+		}
+	}
+	return s[0 : i+1]
+}
+
+func RemovePreSufBlank(s string) string {
+	return RemoveSufBlank(RemovePreBlank(s))
 }
