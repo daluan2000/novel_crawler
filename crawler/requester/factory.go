@@ -5,7 +5,12 @@ import (
 	"novel_crawler/crawler/requester/requester_interf"
 )
 
-func CreateRequester(url *u.URL) requester_interf.Requester {
+var Factory requester_interf.Factory = &factory{}
+
+type factory struct {
+}
+
+func (f *factory) CreateRequester(url *u.URL) requester_interf.Requester {
 	// 暂时只生产这一个类
 	return CreateCommon(url)
 }

@@ -1,8 +1,11 @@
 package chapter
 
 import (
+	"errors"
 	u "net/url"
+	"novel_crawler/crawler/info"
 	"novel_crawler/my_global"
+	"novel_crawler/utils"
 	"os"
 	"strings"
 )
@@ -30,7 +33,24 @@ func (c *Chapter) Save(f *os.File) error {
 }
 
 func (c *Chapter) GenerateText() error {
-	// 删除html文本里的某些标签内容，然后替换掉其他标签，生成换行符
+
+	// 删除content文本中的某些标签
+	var err error
+	for _, v := range info.Getter.GetInfo(c.Url).RemoveSelector {
+		c.ContentText, err = utils.RemoveHtmlElem(c.ContentHtml, v)
+		if err != nil {
+			return err
+		}
+	}
+
+	// 对text进行替换
+	for k, v := range info.Getter.GetInfo(c.Url).StrReplace {
+		c.ContentText = strings.Replace(c.ContentText, k, v, -1)
+	}
+
+	if len(c.ContentText) == 0 {
+		return errors.New("empty content of chapter: " + c.Title)
+	}
 	return nil
 }
 
