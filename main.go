@@ -6,10 +6,10 @@ import (
 	"github.com/vbauerster/mpb/v8/decor"
 	"log"
 	u "net/url"
+	"novel_crawler/config_manager"
 	"novel_crawler/crawler"
 	"novel_crawler/my_global"
 	"novel_crawler/utils"
-	"novel_crawler/utils/config_manager"
 	"os"
 	"time"
 )

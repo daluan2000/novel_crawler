@@ -2,7 +2,6 @@ package fetcher_content
 
 import (
 	"novel_crawler/crawler/chapter"
-	info_ "novel_crawler/crawler/info"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
 )
@@ -18,7 +17,7 @@ func (m *MultiPageFetcher) Fetch(c *chapter.Chapter) error {
 		return err
 	}
 
-	info := info_.Getter.GetInfo(c.Url)
+	info := variable.GetterInfo.GetInfo(c.Url)
 
 	for {
 		// 获取章节content

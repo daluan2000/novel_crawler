@@ -6,7 +6,7 @@ import (
 )
 
 type Fetcher interface {
-	Fetch(c []chapter.Chapter) error
+	Fetch(url *u.URL) ([]chapter.Chapter, error)
 }
 
 type Factory interface {

@@ -1,17 +1,11 @@
-package info
+package getter_info
 
 import (
-	"novel_crawler/crawler/info/info_interf"
+	"novel_crawler/crawler/getter_info/getter_info_interf"
 	"time"
 )
 
-func AddInfo(im map[string]info_interf.Info) {
-	for k, v := range im {
-		infoMap[k] = v
-	}
-}
-
-var infoMap = map[string]info_interf.Info{
+var infoMap = map[string]getter_info_interf.Info{
 	// 笔趣阁
 	"www.2biqu.com": {
 		ASelector:       ".section-list > li > a",
@@ -21,7 +15,7 @@ var infoMap = map[string]info_interf.Info{
 			"<br>":   "",
 			"<br/>":  "",
 		},
-		FrequencyLimit: info_interf.FrequencyLimit{
+		FrequencyLimit: getter_info_interf.FrequencyLimit{
 			Concurrent: 4,
 			Gap:        time.Millisecond * 250,
 		},
@@ -129,7 +123,7 @@ var infoMap = map[string]info_interf.Info{
 			"聽":     " ",
 		},
 		RemoveSelector: []string{"div"},
-		FrequencyLimit: info_interf.FrequencyLimit{
+		FrequencyLimit: getter_info_interf.FrequencyLimit{
 			Concurrent: 4,
 			Gap:        time.Millisecond * 250,
 		},
@@ -159,7 +153,7 @@ var infoMap = map[string]info_interf.Info{
 			"聽":       " ",
 		},
 		RemoveSelector: []string{"script"},
-		FrequencyLimit: info_interf.FrequencyLimit{
+		FrequencyLimit: getter_info_interf.FrequencyLimit{
 			Concurrent: 4,
 			Gap:        time.Millisecond * 250,
 		},
@@ -177,7 +171,7 @@ var infoMap = map[string]info_interf.Info{
 			"聽":       " ",
 		},
 		RemoveSelector: []string{},
-		FrequencyLimit: info_interf.FrequencyLimit{
+		FrequencyLimit: getter_info_interf.FrequencyLimit{
 			Concurrent: 4,
 			Gap:        time.Millisecond * 250,
 		},
@@ -189,13 +183,13 @@ var infoMap = map[string]info_interf.Info{
 
 	"www.xbiqugeo.com": {
 
-		NextChapterList: info_interf.NextChapterList{
+		NextChapterList: getter_info_interf.NextChapterList{
 			HasNextChapterList:      true,
 			ChapterListNextSelector: ".listpage > .right > a",
 			ChapterListNextStr:      "下一页",
 		},
 
-		NextContent: info_interf.NextContent{
+		NextContent: getter_info_interf.NextContent{
 			HasNextContent:      true,
 			ContentNextStr:      "下一页",
 			ContentNextSelector: "#next_url",
@@ -212,13 +206,13 @@ var infoMap = map[string]info_interf.Info{
 
 	"www.zrfsxs.com": {
 
-		NextChapterList: info_interf.NextChapterList{
+		NextChapterList: getter_info_interf.NextChapterList{
 			HasNextChapterList:      true,
 			ChapterListNextSelector: "#pages > a.gr",
 			ChapterListNextStr:      "下一页",
 		},
 
-		NextContent: info_interf.NextContent{
+		NextContent: getter_info_interf.NextContent{
 			HasNextContent:      true,
 			ContentNextStr:      "下一页",
 			ContentNextSelector: ".prenext > span:nth-child(3) > a",

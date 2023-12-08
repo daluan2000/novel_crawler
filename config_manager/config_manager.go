@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	ci "novel_crawler/utils/config_manager/config_manager_interface"
+	ci "novel_crawler/config_manager/config_manager_interface"
 	"strings"
 	"sync"
 	"time"

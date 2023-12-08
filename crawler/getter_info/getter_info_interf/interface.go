@@ -1,4 +1,4 @@
-package info_interf
+package getter_info_interf
 
 import (
 	u "net/url"

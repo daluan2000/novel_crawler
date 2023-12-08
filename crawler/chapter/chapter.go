@@ -3,7 +3,7 @@ package chapter
 import (
 	"errors"
 	u "net/url"
-	"novel_crawler/crawler/info"
+	"novel_crawler/global/variable"
 	"novel_crawler/my_global"
 	"novel_crawler/utils"
 	"os"
@@ -36,7 +36,7 @@ func (c *Chapter) GenerateText() error {
 
 	// 删除content文本中的某些标签
 	var err error
-	for _, v := range info.Getter.GetInfo(c.Url).RemoveSelector {
+	for _, v := range variable.GetterInfo.GetInfo(c.Url).RemoveSelector {
 		c.ContentText, err = utils.RemoveHtmlElem(c.ContentHtml, v)
 		if err != nil {
 			return err
@@ -44,7 +44,7 @@ func (c *Chapter) GenerateText() error {
 	}
 
 	// 对text进行替换
-	for k, v := range info.Getter.GetInfo(c.Url).StrReplace {
+	for k, v := range variable.GetterInfo.GetInfo(c.Url).StrReplace {
 		c.ContentText = strings.Replace(c.ContentText, k, v, -1)
 	}
 
