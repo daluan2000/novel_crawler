@@ -19,6 +19,7 @@ type Chapter struct {
 	ContentHtml  string   // html文本
 	ContentText  string   // text文本
 	ContentFinal []string // 处理后最终写入的文本，每一个字符串代表一行
+	Err          error
 }
 
 func (c *Chapter) Save(f *os.File) error {
@@ -32,9 +33,16 @@ func (c *Chapter) Save(f *os.File) error {
 	_, err := f.WriteString(str)
 	return err
 }
+func (c *Chapter) DoBeforeSave() error {
+	err := c.generateText()
+	if err != nil {
+		return err
+	}
+	c.generateFinal()
+	return nil
+}
 
-func (c *Chapter) GenerateText() error {
-
+func (c *Chapter) generateText() error {
 	// 删除content文本中的某些标签
 	var err error
 	for _, v := range variable.InfoStore.GetInfo(c.Url).RemoveSelector {
@@ -55,7 +63,7 @@ func (c *Chapter) GenerateText() error {
 	return nil
 }
 
-func (c *Chapter) GenerateFinal() {
+func (c *Chapter) generateFinal() {
 	finalContent := strings.Split(c.ContentText, "\n")
 	for i := 0; i < len(finalContent); i++ {
 		finalContent[i] = str_util.RemovePreSufBlank(finalContent[i])

@@ -1,5 +1,8 @@
 package consts
 
+import "time"
+
 const (
-	InfoFileName = "info"
+	RetryCount = 5
+	RetrySleep = time.Second
 )

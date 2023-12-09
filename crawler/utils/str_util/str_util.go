@@ -3,9 +3,12 @@ package str_util
 import (
 	"bytes"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/vbauerster/mpb/v8"
+	"github.com/vbauerster/mpb/v8/decor"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 	"io"
+	"novel_crawler/utils"
 	"slices"
 	"strings"
 	"unicode/utf8"
@@ -80,4 +83,22 @@ func RemoveSufBlank(s string) string {
 
 func RemovePreSufBlank(s string) string {
 	return RemoveSufBlank(RemovePreBlank(s))
+}
+
+func ProgressBar(count int) (*mpb.Progress, *mpb.Bar) {
+	// 进度条，进度条每次输出时，会把上一行消除掉，所以打日志时每行末尾多加一个\n
+	p := mpb.New(mpb.WithWidth(64))
+	bar := p.New(int64(count),
+		// BarFillerBuilder with custom style
+		mpb.BarStyle().Lbound("╢").Filler("=").Tip(">").Padding("-").Rbound("╟"),
+		mpb.PrependDecorators(
+			decor.Name(utils.Green("章节下载中......"), decor.WC{W: len("章节下载中......") + 1, C: decor.DidentRight}),
+			decor.Name(utils.Green("进度："), decor.WCSyncSpaceR),
+			decor.CountersNoUnit(utils.Green("%d / %d"), decor.WCSyncWidth),
+		),
+		mpb.AppendDecorators(
+			decor.OnComplete(decor.Percentage(decor.WC{W: 5}), "done"),
+		),
+	)
+	return p, bar
 }

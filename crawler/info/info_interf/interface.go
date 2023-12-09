@@ -29,17 +29,18 @@ type FrequencyLimit struct {
 }
 
 type NextChapterList struct {
-	HasNextChapterList      bool
+	MultiPageChapterList    bool
 	ChapterListNextSelector string
 	ChapterListNextStr      string
 }
 
 type NextContent struct {
-	HasNextContent      bool
+	MultiPageContent    bool
 	ContentNextSelector string
 	ContentNextStr      string
 }
 
 type InfoStore interface {
 	GetInfo(url *u.URL) Info
+	Exist(url *u.URL) bool
 }

@@ -1,13 +1,13 @@
 package bootstrap
 
 import (
+	"log"
 	"novel_crawler/crawler/info"
 	"novel_crawler/global/variable"
 )
 
 func init() {
-	if err := info.ReadYaml(); err != nil {
+	log.SetFlags(log.LstdFlags)
 
-	}
 	variable.InfoStore = info.CreateStore()
 }

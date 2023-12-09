@@ -6,6 +6,9 @@ import (
 	"log"
 	"net/http"
 	u "net/url"
+	"novel_crawler/crawler/utils/retry"
+	"novel_crawler/global/consts"
+	"novel_crawler/global/variable"
 	"novel_crawler/my_global"
 	"novel_crawler/utils"
 	"time"
@@ -41,7 +44,15 @@ func (c *Common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
 	req, _ := http.NewRequest("GET", urlStr, nil)
 	req.Header.Set("User-Agent", utils.RandomUserAgent())
 
-	resp, err := client.Do(req)
+	var resp *http.Response
+
+	// 发起请求
+	err := retry.Retry(func() error {
+		var err1 error
+		resp, err1 = client.Do(req)
+		return err1
+	}, consts.RetryCount)
+
 	if err != nil {
 		return nil, err
 	}
@@ -64,9 +75,7 @@ func (c *Common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
 
 func CreateCommon(url *u.URL) *Common {
 	res := &Common{}
-	if rfl, ok := my_global.RFLimit[url.Hostname()]; ok {
-		res.Glc, res.Gap = make(chan interface{}, rfl.Concurrent), rfl.Gap
-	}
-	res.Glc, res.Gap = make(chan interface{}, my_global.DefaultRFL.Concurrent), my_global.DefaultRFL.Gap
+	fl := variable.InfoStore.GetInfo(url).FrequencyLimit
+	res.Glc, res.Gap = make(chan interface{}, fl.Concurrent), fl.Gap
 	return res
 }

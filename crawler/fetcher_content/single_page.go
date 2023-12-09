@@ -7,10 +7,10 @@ import (
 	"novel_crawler/my_global"
 )
 
-type SinglePageFetcher struct {
+type singlePageFetcher struct {
 }
 
-func (s *SinglePageFetcher) FetchChapterContent(c chapter.Chapter) error {
+func (s *singlePageFetcher) Fetch(c *chapter.Chapter) error {
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := variable.Requester.CreateGoQuery(c.Url)

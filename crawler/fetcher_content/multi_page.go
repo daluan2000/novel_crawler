@@ -6,10 +6,10 @@ import (
 	"novel_crawler/global/variable"
 )
 
-type MultiPageFetcher struct {
+type multiPageFetcher struct {
 }
 
-func (m *MultiPageFetcher) Fetch(c *chapter.Chapter) error {
+func (m *multiPageFetcher) Fetch(c *chapter.Chapter) error {
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := variable.Requester.CreateGoQuery(c.Url)

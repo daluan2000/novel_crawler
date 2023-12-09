@@ -5,6 +5,10 @@ import (
 	"time"
 )
 
+/*
+网站的一切信息存在此文件的数据结构里
+包括选择器、filter、fetcher等等
+*/
 var infoMap = map[string]info_interf.Info{
 	// 笔趣阁
 	"www.2biqu.com": {
@@ -37,9 +41,9 @@ var infoMap = map[string]info_interf.Info{
 		ASelector:       "dd > a",
 		ContentSelector: "#content",
 		StrReplace: map[string]string{
-			"\u807d聽聽聽":  "    ",
-			"<br/><br/>": "\n",
-			"<br><br>":   "\n",
+			"\u807d聽聽聽": "    ",
+			"<br/><br/>":   "\n",
+			"<br><br>":     "\n",
 		},
 	},
 
@@ -56,7 +60,7 @@ var infoMap = map[string]info_interf.Info{
 		ASelector:       ".panel-body > dd > a",
 		ContentSelector: "#htmlContent",
 		StrReplace: map[string]string{
-			"聽":     "",
+			"聽":    "",
 			"<br>":  "",
 			"<br/>": "",
 		},
@@ -120,7 +124,7 @@ var infoMap = map[string]info_interf.Info{
 			"</p>":  "",
 			"<br/>": "",
 			"<br>":  "",
-			"聽":     " ",
+			"聽":    " ",
 		},
 		RemoveSelector: []string{"div"},
 		FrequencyLimit: info_interf.FrequencyLimit{
@@ -135,7 +139,7 @@ var infoMap = map[string]info_interf.Info{
 		StrReplace: map[string]string{
 			"<br/>": "",
 			"<br>":  "",
-			"聽":     " ",
+			"聽":    " ",
 		},
 		RemoveSelector: []string{},
 	},
@@ -150,7 +154,7 @@ var infoMap = map[string]info_interf.Info{
 			"</p>":    "",
 			"<span>":  "",
 			"</span>": "",
-			"聽":       " ",
+			"聽":      " ",
 		},
 		RemoveSelector: []string{"script"},
 		FrequencyLimit: info_interf.FrequencyLimit{
@@ -168,7 +172,7 @@ var infoMap = map[string]info_interf.Info{
 			"</p>":    "",
 			"<span>":  "",
 			"</span>": "",
-			"聽":       " ",
+			"聽":      " ",
 		},
 		RemoveSelector: []string{},
 		FrequencyLimit: info_interf.FrequencyLimit{
@@ -184,13 +188,13 @@ var infoMap = map[string]info_interf.Info{
 	"www.xbiqugeo.com": {
 
 		NextChapterList: info_interf.NextChapterList{
-			HasNextChapterList:      true,
+			MultiPageChapterList:    true,
 			ChapterListNextSelector: ".listpage > .right > a",
 			ChapterListNextStr:      "下一页",
 		},
 
 		NextContent: info_interf.NextContent{
-			HasNextContent:      true,
+			MultiPageContent:    true,
 			ContentNextStr:      "下一页",
 			ContentNextSelector: "#next_url",
 		},
@@ -207,13 +211,13 @@ var infoMap = map[string]info_interf.Info{
 	"www.zrfsxs.com": {
 
 		NextChapterList: info_interf.NextChapterList{
-			HasNextChapterList:      true,
+			MultiPageChapterList:    true,
 			ChapterListNextSelector: "#pages > a.gr",
 			ChapterListNextStr:      "下一页",
 		},
 
 		NextContent: info_interf.NextContent{
-			HasNextContent:      true,
+			MultiPageContent:    true,
 			ContentNextStr:      "下一页",
 			ContentNextSelector: ".prenext > span:nth-child(3) > a",
 		},
@@ -225,5 +229,54 @@ var infoMap = map[string]info_interf.Info{
 			"<p>":  "\n    ",
 			"</p>": "",
 		},
+	},
+
+	"youyouxs.com": {
+		NextChapterList: info_interf.NextChapterList{
+			MultiPageChapterList:    true,
+			ChapterListNextSelector: ".index-container-btn:last-child",
+			ChapterListNextStr:      "下一页",
+		},
+
+		NextContent: info_interf.NextContent{
+			MultiPageContent:    true,
+			ContentNextStr:      "下一页",
+			ContentNextSelector: ".bottem1 > a:last-child",
+		},
+
+		ASelector:       "a[rel='chapter']",
+		ContentSelector: "#booktxt",
+
+		StrReplace: map[string]string{
+			"<p>":  "\n    ",
+			"</p>": "",
+		},
+
+		RemoveSelector: []string{"div"},
+	},
+
+	"www.biqge.org": {
+
+		NextChapterList: info_interf.NextChapterList{
+			MultiPageChapterList:    true,
+			ChapterListNextSelector: "a.index-container-btn:last-child",
+			ChapterListNextStr:      "下一页",
+		},
+
+		NextContent: info_interf.NextContent{
+			MultiPageContent:    true,
+			ContentNextStr:      "下一页",
+			ContentNextSelector: "#next_url",
+		},
+
+		ASelector:       ".section-box:nth-child(4) li > a",
+		ContentSelector: "#content",
+
+		StrReplace: map[string]string{
+			"<p>":  "   ",
+			"</p>": "",
+		},
+
+		RemoveSelector: []string{},
 	},
 }
