@@ -6,8 +6,13 @@ import (
 	"github.com/vbauerster/mpb/v8/decor"
 	"log"
 	u "net/url"
+	_ "novel_crawler/bootstrap"
 	"novel_crawler/crawler"
+	"novel_crawler/crawler/controller"
+	"novel_crawler/crawler/filter"
+	"novel_crawler/crawler/requester"
 	"novel_crawler/crawler/utils/config_manager"
+	"novel_crawler/global/variable"
 	"novel_crawler/my_global"
 	"novel_crawler/utils"
 	"os"
@@ -220,7 +225,13 @@ func main() {
 	my_global.SaveTitle = *saveTitle == 1
 
 	initConcurrentLimit(*urlStr)
-	doCrawler(*urlStr, *fileName+".txt")
+
+	if url, err := u.Parse(*urlStr); err == nil {
+		variable.Requester = requester.Factory.CreateRequester(url)
+		variable.Filter = filter.Factory.CreateFilter(url)
+		cl := controller.Factory.CreateController(url)
+		cl.DoCrawling(url, *fileName+".txt")
+	}
 
 	time.Sleep(time.Second)
 }

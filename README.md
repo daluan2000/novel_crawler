@@ -80,7 +80,7 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 8. www.wbsz.org 完本神站
 
 ```shell
-go run .\main.go -f 优等生不需要超能力 -u https://www.wbsz.org/18874/
+go run .\main.go -f 优等生不需要超能力.txt -u https://www.wbsz.org/18874/
 ```
 ### 第二类网站
 

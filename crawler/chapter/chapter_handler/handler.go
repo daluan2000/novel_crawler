@@ -1,8 +1,8 @@
-package chapter
+package chapter_handler
 
 import (
 	"errors"
-	u "net/url"
+	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
 	"novel_crawler/my_global"
@@ -11,38 +11,21 @@ import (
 	"strings"
 )
 
-// Chapter 爬取流程相同的共用同一个实现类
-type Chapter struct {
-	Number       int // 序号
-	Url          *u.URL
-	Title        string
-	ContentHtml  string   // html文本
-	ContentText  string   // text文本
-	ContentFinal []string // 处理后最终写入的文本，每一个字符串代表一行
-	Err          error
+type Handler struct {
 }
 
-func (c *Chapter) Save(f *os.File) error {
-
+func (h *Handler) Save(f *os.File, c *chapter_interf.Chapter) error {
 	str := ""
 	if my_global.SaveTitle {
 		str += c.Title + "\n"
 	}
 	str += "支持正版，人人有责\n支持正版，人人有责\n"
-	str += strings.Join(c.ContentFinal, "\n")
+	str += strings.Join(c.ContentFinal, "\n") + "\n"
 	_, err := f.WriteString(str)
 	return err
 }
-func (c *Chapter) DoBeforeSave() error {
-	err := c.generateText()
-	if err != nil {
-		return err
-	}
-	c.generateFinal()
-	return nil
-}
 
-func (c *Chapter) generateText() error {
+func (h *Handler) generateText(c *chapter_interf.Chapter) error {
 	// 删除content文本中的某些标签
 	var err error
 	for _, v := range variable.InfoStore.GetInfo(c.Url).RemoveSelector {
@@ -63,7 +46,7 @@ func (c *Chapter) generateText() error {
 	return nil
 }
 
-func (c *Chapter) generateFinal() {
+func (h *Handler) generateFinal(c *chapter_interf.Chapter) {
 	finalContent := strings.Split(c.ContentText, "\n")
 	for i := 0; i < len(finalContent); i++ {
 		finalContent[i] = str_util.RemovePreSufBlank(finalContent[i])
@@ -76,4 +59,12 @@ func (c *Chapter) generateFinal() {
 		}
 	}
 
+}
+func (h *Handler) DoBeforeSave(c *chapter_interf.Chapter) error {
+	err := h.generateText(c)
+	if err != nil {
+		return err
+	}
+	h.generateFinal(c)
+	return nil
 }

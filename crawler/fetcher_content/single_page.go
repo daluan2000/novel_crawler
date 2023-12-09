@@ -1,7 +1,7 @@
 package fetcher_content
 
 import (
-	"novel_crawler/crawler/chapter"
+	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
 	"novel_crawler/my_global"
@@ -10,7 +10,7 @@ import (
 type singlePageFetcher struct {
 }
 
-func (s *singlePageFetcher) Fetch(c *chapter.Chapter) error {
+func (s *singlePageFetcher) Fetch(c *chapter_interf.Chapter) error {
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := variable.Requester.CreateGoQuery(c.Url)

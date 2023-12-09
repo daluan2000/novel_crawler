@@ -4,7 +4,8 @@ import (
 	"errors"
 	"log"
 	u "net/url"
-	"novel_crawler/crawler/chapter"
+	"novel_crawler/crawler/chapter/chapter_handler"
+	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/fetcher_content"
 	"novel_crawler/crawler/fetcher_list"
 	"novel_crawler/crawler/utils/color_util"
@@ -14,10 +15,10 @@ import (
 	"time"
 )
 
-type Common struct {
+type common struct {
 }
 
-func (c *Common) DoCrawling(url *u.URL, fileName string) {
+func (c *common) DoCrawling(url *u.URL, fileName string) {
 
 	info := variable.InfoStore.GetInfo(url)
 	glc := make(chan interface{}, info.FrequencyLimit.Concurrent)
@@ -40,7 +41,7 @@ func (c *Common) DoCrawling(url *u.URL, fileName string) {
 
 	p, bar := str_util.ProgressBar(len(chapters))
 
-	errChapters := make([]chapter.Chapter, 0)
+	errChapters := make([]chapter_interf.Chapter, 0)
 	for i := 0; i < len(chapters); i++ {
 		go func(idx int) {
 			glc <- 1
@@ -53,10 +54,11 @@ func (c *Common) DoCrawling(url *u.URL, fileName string) {
 
 			err := errors.New("")
 			fc := fetcher_content.Factory.CreateFetcher(chapters[idx].Url)
+			ch := chapter_handler.Handler{}
 			hasErr := true
 			if err = fc.Fetch(&chapters[idx]); err == nil {
-				if err = chapters[idx].DoBeforeSave(); err == nil {
-					if err = chapters[idx].Save(f); err == nil {
+				if err = ch.DoBeforeSave(&chapters[idx]); err == nil {
+					if err = ch.Save(f, &chapters[idx]); err == nil {
 						hasErr = false
 					}
 				}

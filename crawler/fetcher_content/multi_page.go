@@ -1,7 +1,7 @@
 package fetcher_content
 
 import (
-	"novel_crawler/crawler/chapter"
+	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
 )
@@ -9,7 +9,7 @@ import (
 type multiPageFetcher struct {
 }
 
-func (m *multiPageFetcher) Fetch(c *chapter.Chapter) error {
+func (m *multiPageFetcher) Fetch(c *chapter_interf.Chapter) error {
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := variable.Requester.CreateGoQuery(c.Url)

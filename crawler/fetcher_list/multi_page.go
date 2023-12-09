@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/PuerkitoBio/goquery"
 	u "net/url"
-	"novel_crawler/crawler/chapter"
+	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
 )
@@ -12,7 +12,7 @@ import (
 type multiPageFetcher struct {
 }
 
-func (m *multiPageFetcher) Fetch(url *u.URL) ([]chapter.Chapter, error) {
+func (m *multiPageFetcher) Fetch(url *u.URL) ([]chapter_interf.Chapter, error) {
 
 	// 发起http请求，获取网页内容并解析
 	dom, err := variable.Requester.CreateGoQuery(url)
@@ -20,7 +20,7 @@ func (m *multiPageFetcher) Fetch(url *u.URL) ([]chapter.Chapter, error) {
 		return nil, err
 	}
 
-	r := make([]chapter.Chapter, 0)
+	r := make([]chapter_interf.Chapter, 0)
 	info := variable.InfoStore.GetInfo(url)
 
 	for {
@@ -33,7 +33,7 @@ func (m *multiPageFetcher) Fetch(url *u.URL) ([]chapter.Chapter, error) {
 					// 获取a标签文本，也就是标题内容，有些网站采用gbk编码，这里编码格式统一调整为utf8
 					if bts, err := str_util.GbkToUtf8([]byte(selection.Text())); err == nil {
 						// 把获取到的信息append到r里面
-						r = append(r, chapter.Chapter{
+						r = append(r, chapter_interf.Chapter{
 							Url:   pathUrl,
 							Title: string(bts),
 						})

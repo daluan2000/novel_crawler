@@ -2,11 +2,11 @@ package fetcher_content_interf
 
 import (
 	u "net/url"
-	"novel_crawler/crawler/chapter"
+	"novel_crawler/crawler/chapter/chapter_interf"
 )
 
 type Fetcher interface {
-	Fetch(c *chapter.Chapter) error
+	Fetch(c *chapter_interf.Chapter) error
 }
 
 type Factory interface {
