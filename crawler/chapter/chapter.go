@@ -3,6 +3,7 @@ package chapter
 import (
 	"errors"
 	u "net/url"
+	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
 	"novel_crawler/my_global"
 	"novel_crawler/utils"
@@ -55,5 +56,16 @@ func (c *Chapter) GenerateText() error {
 }
 
 func (c *Chapter) GenerateFinal() {
+	finalContent := strings.Split(c.ContentText, "\n")
+	for i := 0; i < len(finalContent); i++ {
+		finalContent[i] = str_util.RemovePreSufBlank(finalContent[i])
+	}
+
+	c.ContentFinal = make([]string, 0)
+	for i := 0; i < len(finalContent); i++ {
+		if finalContent[i] != "" {
+			c.ContentFinal = append(c.ContentFinal, finalContent[i])
+		}
+	}
 
 }

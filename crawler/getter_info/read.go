@@ -1,8 +1,8 @@
 package getter_info
 
 import (
-	"novel_crawler/config_manager"
 	"novel_crawler/crawler/getter_info/getter_info_interf"
+	"novel_crawler/crawler/utils/config_manager"
 	"novel_crawler/global/consts"
 )
 
