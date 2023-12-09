@@ -21,7 +21,7 @@ func (m *MultiPageFetcher) Fetch(url *u.URL) ([]chapter.Chapter, error) {
 	}
 
 	r := make([]chapter.Chapter, 0)
-	info := variable.GetterInfo.GetInfo(url)
+	info := variable.InfoStore.GetInfo(url)
 
 	for {
 		// 把当前页包含的章节存起来

@@ -22,7 +22,7 @@ func (s *SinglePageFetcher) FetchChapterContent(url *u.URL) ([]chapter.Chapter, 
 
 	// 获取章节目录信息
 	r := make([]chapter.Chapter, 0)
-	dom.Find(variable.GetterInfo.GetInfo(url).ASelector).Each(func(i int, selection *goquery.Selection) {
+	dom.Find(variable.InfoStore.GetInfo(url).ASelector).Each(func(i int, selection *goquery.Selection) {
 		// 获取a标签链接
 		if path, ok := selection.Attr("href"); ok {
 			// 把a标签链接转为url

@@ -2,8 +2,8 @@ package variable
 
 import (
 	"novel_crawler/crawler/filter/filter_interf"
-	"novel_crawler/crawler/getter_info/getter_info_interf"
 	"novel_crawler/crawler/getter_next/getter_next_interf"
+	"novel_crawler/crawler/info/info_interf"
 	"novel_crawler/crawler/requester/requester_interf"
 )
 
@@ -12,7 +12,9 @@ var (
 )
 
 var (
-	GetterInfo            getter_info_interf.InfoGetter
+	InfoStore info_interf.InfoStore
+)
+var (
 	GetterNextContent     getter_next_interf.Getter
 	GetterNextChapterList getter_next_interf.Getter
 )

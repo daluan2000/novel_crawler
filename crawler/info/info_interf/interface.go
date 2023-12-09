@@ -1,4 +1,4 @@
-package getter_info_interf
+package info_interf
 
 import (
 	u "net/url"
@@ -40,6 +40,6 @@ type NextContent struct {
 	ContentNextStr      string
 }
 
-type InfoGetter interface {
+type InfoStore interface {
 	GetInfo(url *u.URL) Info
 }

@@ -17,7 +17,7 @@ func (m *MultiPageFetcher) Fetch(c *chapter.Chapter) error {
 		return err
 	}
 
-	info := variable.GetterInfo.GetInfo(c.Url)
+	info := variable.InfoStore.GetInfo(c.Url)
 
 	for {
 		// 获取章节content
