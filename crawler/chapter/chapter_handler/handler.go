@@ -5,8 +5,6 @@ import (
 	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
-	"novel_crawler/my_global"
-	"novel_crawler/utils"
 	"os"
 	"strings"
 )
@@ -16,7 +14,7 @@ type Handler struct {
 
 func (h *Handler) Save(f *os.File, c *chapter_interf.Chapter) error {
 	str := ""
-	if my_global.SaveTitle {
+	if variable.SaveTitle {
 		str += c.Title + "\n"
 	}
 	str += "支持正版，人人有责\n支持正版，人人有责\n"
@@ -28,14 +26,18 @@ func (h *Handler) Save(f *os.File, c *chapter_interf.Chapter) error {
 func (h *Handler) generateText(c *chapter_interf.Chapter) error {
 	// 删除content文本中的某些标签
 	var err error
+	c.ContentText = c.ContentHtml
 	for _, v := range variable.InfoStore.GetInfo(c.Url).RemoveSelector {
-		c.ContentText, err = utils.RemoveHtmlElem(c.ContentHtml, v)
+		c.ContentText, err = str_util.RemoveHtmlElem(c.ContentText, v)
 		if err != nil {
 			return err
 		}
 	}
 
 	// 对text进行替换
+	for k, v := range variable.InfoStore.GetBaseReplace() {
+		c.ContentText = strings.Replace(c.ContentText, k, v, -1)
+	}
 	for k, v := range variable.InfoStore.GetInfo(c.Url).StrReplace {
 		c.ContentText = strings.Replace(c.ContentText, k, v, -1)
 	}

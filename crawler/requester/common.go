@@ -7,42 +7,28 @@ import (
 	"net/http"
 	u "net/url"
 	"novel_crawler/crawler/utils/retry"
+	"novel_crawler/crawler/utils/user_agent"
 	"novel_crawler/global/consts"
 	"novel_crawler/global/variable"
-	"novel_crawler/my_global"
-	"novel_crawler/utils"
 	"time"
 )
 
-type Common struct {
-	// Glc goroutine limit channel 限制并发量
-	// Gap 每一次请求的睡眠时间，限制吞吐量
-	Glc chan interface{}
-	Gap time.Duration
+type common struct {
 }
 
-// CreateGoQuery 所有的http请求都通过这里发送
-func (c *Common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
+// CreateGoQuery 所有的http请求都通过这里发送 这里不再进行并发限制
+func (c *common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
 
 	urlStr := url.String()
 
-	my_global.RequestCount++
+	variable.RequestCount++
 
 	var client = &http.Client{
 		Timeout: time.Second * 15,
 	}
 
-	// 并发限制
-	c.Glc <- 1
-	defer func() {
-		if c.Gap > 0 {
-			time.Sleep(c.Gap)
-		}
-		_ = <-c.Glc
-	}()
-
 	req, _ := http.NewRequest("GET", urlStr, nil)
-	req.Header.Set("User-Agent", utils.RandomUserAgent())
+	req.Header.Set("User-Agent", user_agent.RandomUserAgent())
 
 	var resp *http.Response
 
@@ -71,11 +57,4 @@ func (c *Common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
 	dom, err := goquery.NewDocumentFromReader(resp.Body)
 	return dom, err
 
-}
-
-func CreateCommon(url *u.URL) *Common {
-	res := &Common{}
-	fl := variable.InfoStore.GetInfo(url).FrequencyLimit
-	res.Glc, res.Gap = make(chan interface{}, fl.Concurrent), fl.Gap
-	return res
 }

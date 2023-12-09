@@ -1,0 +1,20 @@
+
+
+Info:
+
+  "www.2biqu.com":
+    ASelector:       ".section-list > li > a"
+    ContentSelector: "#content"
+    StrReplace:
+      "\u807d": " "
+      "<br>":   ""
+      "<br/>":  ""
+
+  "www.bige3.cc":
+    ASelector: "dl dd > a:not(a[rel='nofollow'])"
+    ContentSelector: "#chaptercontent"
+    StrReplace:
+      "\u807d": " "
+      "<br/><br/>": ""
+      "<br><br>": ""
+

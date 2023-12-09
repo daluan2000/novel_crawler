@@ -12,5 +12,5 @@ type factory struct {
 
 func (f *factory) CreateRequester(url *u.URL) requester_interf.Requester {
 	// 暂时只生产这一个类
-	return CreateCommon(url)
+	return &common{}
 }

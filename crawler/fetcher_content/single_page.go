@@ -4,7 +4,6 @@ import (
 	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
-	"novel_crawler/my_global"
 )
 
 type singlePageFetcher struct {
@@ -19,7 +18,7 @@ func (s *singlePageFetcher) Fetch(c *chapter_interf.Chapter) error {
 	}
 
 	// 获取章节content
-	c.ContentHtml, err = dom.Find(my_global.BiQuGeInfoByHost[c.Url.Hostname()].ContentSelector).Html()
+	c.ContentHtml, err = dom.Find(variable.InfoStore.GetInfo(c.Url).ContentSelector).Html()
 	if err != nil {
 		return err
 	}

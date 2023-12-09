@@ -9,16 +9,15 @@ import (
 
 var (
 	Requester requester_interf.Requester
-)
-
-var (
 	InfoStore info_interf.InfoStore
-)
-var (
+
 	GetterNextContent     getter_next_interf.Getter
 	GetterNextChapterList getter_next_interf.Getter
+
+	Filter filter_interf.Filter
 )
 
 var (
-	Filter filter_interf.Filter
+	SaveTitle    = true
+	RequestCount = 0
 )

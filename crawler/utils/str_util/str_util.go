@@ -8,7 +8,7 @@ import (
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 	"io"
-	"novel_crawler/utils"
+	"novel_crawler/crawler/utils/color_util"
 	"slices"
 	"strings"
 	"unicode/utf8"
@@ -92,9 +92,9 @@ func ProgressBar(count int) (*mpb.Progress, *mpb.Bar) {
 		// BarFillerBuilder with custom style
 		mpb.BarStyle().Lbound("╢").Filler("=").Tip(">").Padding("-").Rbound("╟"),
 		mpb.PrependDecorators(
-			decor.Name(utils.Green("章节下载中......"), decor.WC{W: len("章节下载中......") + 1, C: decor.DidentRight}),
-			decor.Name(utils.Green("进度："), decor.WCSyncSpaceR),
-			decor.CountersNoUnit(utils.Green("%d / %d"), decor.WCSyncWidth),
+			decor.Name(color_util.Green("章节下载中......"), decor.WC{W: len("章节下载中......") + 1, C: decor.DidentRight}),
+			decor.Name(color_util.Green("进度："), decor.WCSyncSpaceR),
+			decor.CountersNoUnit(color_util.Green("%d / %d"), decor.WCSyncWidth),
 		),
 		mpb.AppendDecorators(
 			decor.OnComplete(decor.Percentage(decor.WC{W: 5}), "done"),

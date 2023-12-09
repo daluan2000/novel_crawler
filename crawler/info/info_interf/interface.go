@@ -43,4 +43,5 @@ type NextContent struct {
 type InfoStore interface {
 	GetInfo(url *u.URL) Info
 	Exist(url *u.URL) bool
+	GetBaseReplace() map[string]string
 }
