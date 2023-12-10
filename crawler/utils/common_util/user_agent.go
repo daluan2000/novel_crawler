@@ -1,4 +1,4 @@
-package user_agent
+package common_util
 
 import "math/rand"
 

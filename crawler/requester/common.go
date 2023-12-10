@@ -6,8 +6,7 @@ import (
 	"log"
 	"net/http"
 	u "net/url"
-	"novel_crawler/crawler/utils/retry"
-	"novel_crawler/crawler/utils/user_agent"
+	"novel_crawler/crawler/utils/common_util"
 	"novel_crawler/global/consts"
 	"novel_crawler/global/variable"
 	"time"
@@ -28,12 +27,12 @@ func (c *common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
 	}
 
 	req, _ := http.NewRequest("GET", urlStr, nil)
-	req.Header.Set("User-Agent", user_agent.RandomUserAgent())
+	req.Header.Set("User-Agent", common_util.RandomUserAgent())
 
 	var resp *http.Response
 
 	// 发起请求
-	err := retry.Retry(func() error {
+	err := common_util.Retry(func() error {
 		var err1 error
 		resp, err1 = client.Do(req)
 		return err1

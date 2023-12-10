@@ -1,4 +1,4 @@
-package retry
+package common_util
 
 import (
 	"novel_crawler/global/consts"

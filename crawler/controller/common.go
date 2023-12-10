@@ -10,8 +10,7 @@ import (
 	"novel_crawler/crawler/fetcher_content"
 	"novel_crawler/crawler/fetcher_list"
 	"novel_crawler/crawler/utils/color_util"
-	"novel_crawler/crawler/utils/retry"
-	"novel_crawler/crawler/utils/str_util"
+	"novel_crawler/crawler/utils/common_util"
 	"novel_crawler/global/consts"
 	"novel_crawler/global/variable"
 	"os"
@@ -34,7 +33,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 	// 爬取章节列表，error进行retry
 	fl := fetcher_list.Fatory.CreateFetcher(url)
 	chapters := make([]chapter_interf.Chapter, 0)
-	err := retry.Retry(func() error {
+	err := common_util.Retry(func() error {
 		var err1 error
 		chapters, err1 = fl.Fetch(url)
 		return err1
@@ -51,7 +50,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 		return
 	}
 
-	p, bar := str_util.ProgressBar(len(chapters))
+	p, bar := common_util.ProgressBar(len(chapters))
 
 	// 爬取章节内容
 	sc := make([]chan interface{}, len(chapters))
