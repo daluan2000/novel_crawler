@@ -66,7 +66,6 @@ var infoMap = map[string]info_interf.Info{
 	"www.bixiashenghua.com": {
 		ASelector:       "#list > dl > dd > a",
 		ContentSelector: "#content",
-		RemoveSelector:  []string{},
 	},
 
 	// 千叶阁 sb网站限制频率
@@ -83,7 +82,6 @@ var infoMap = map[string]info_interf.Info{
 	"www.biquinfo.com": {
 		ASelector:       "#section-list > li > a",
 		ContentSelector: "#content",
-		RemoveSelector:  []string{},
 	},
 
 	"www.wbsz.org": {
@@ -98,7 +96,6 @@ var infoMap = map[string]info_interf.Info{
 	"www.beqege.com": {
 		ASelector:       "#list > dl > dd > a",
 		ContentSelector: "#content",
-		RemoveSelector:  []string{},
 		FrequencyLimit: info_interf.FrequencyLimit{
 			Concurrent: 4,
 			Gap:        time.Millisecond * 250,
@@ -180,7 +177,5 @@ var infoMap = map[string]info_interf.Info{
 
 		ASelector:       ".section-box:nth-child(4) li > a",
 		ContentSelector: "#content",
-
-		RemoveSelector: []string{},
 	},
 }

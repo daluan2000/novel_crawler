@@ -16,8 +16,14 @@ func main() {
 	var fileName = flag.String("f", "", "保存文件名")
 	var urlStr = flag.String("u", "", "url链接")
 	var saveTitle = flag.Int("st", 1, "保存tittle为1，不保存title为2，不输入该参数默认为1")
+	var logLevel = flag.Int("log", 1, "默认为1，打印详细log为2")
 	flag.Parse()
 	variable.SaveTitle = *saveTitle == 1
+	if *logLevel == 2 {
+		log.SetFlags(log.LstdFlags | log.Lshortfile)
+	} else {
+		log.SetFlags(log.Ltime)
+	}
 
 	url, err := u.Parse(*urlStr)
 	if err != nil {

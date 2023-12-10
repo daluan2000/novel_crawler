@@ -3,10 +3,13 @@ package fetcher_list
 import (
 	"errors"
 	"github.com/PuerkitoBio/goquery"
+	"log"
 	u "net/url"
 	"novel_crawler/crawler/chapter/chapter_interf"
+	"novel_crawler/crawler/utils/color_util"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
+	"strings"
 )
 
 type multiPageFetcher struct {
@@ -14,6 +17,7 @@ type multiPageFetcher struct {
 
 func (m *multiPageFetcher) Fetch(url *u.URL) ([]chapter_interf.Chapter, error) {
 
+	log.Println(color_util.Yellow("章节目录是分页展示的，可能需要更长时间来获取"))
 	// 发起http请求，获取网页内容并解析
 	dom, err := variable.Requester.CreateGoQuery(url)
 	if err != nil {
@@ -33,10 +37,12 @@ func (m *multiPageFetcher) Fetch(url *u.URL) ([]chapter_interf.Chapter, error) {
 					// 获取a标签文本，也就是标题内容，有些网站采用gbk编码，这里编码格式统一调整为utf8
 					if bts, err := str_util.GbkToUtf8([]byte(selection.Text())); err == nil {
 						// 把获取到的信息append到r里面
-						r = append(r, chapter_interf.Chapter{
-							Url:   pathUrl,
-							Title: string(bts),
-						})
+						if strings.HasPrefix(pathUrl.String(), "http") {
+							r = append(r, chapter_interf.Chapter{
+								Url:   pathUrl,
+								Title: string(bts),
+							})
+						}
 					}
 				}
 			}

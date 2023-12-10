@@ -9,5 +9,6 @@ type Getter interface {
 	NextUrl(dom *goquery.Document) (*u.URL, error)
 }
 type Factory interface {
-	CreateGetter(url *u.URL) Getter
+	CreateContentNextGetter(url *u.URL) Getter
+	CreateChapterListNextGetter(url *u.URL) Getter
 }

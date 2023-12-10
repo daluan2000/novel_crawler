@@ -22,7 +22,7 @@ type common struct {
 
 func (c *common) DoCrawling(url *u.URL, fileName string) {
 
-	st := time.Now().Second()
+	st := time.Now().UnixMilli()
 
 	// 读取并发限制相关信息
 	info := variable.InfoStore.GetInfo(url)
@@ -31,6 +31,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 	log.Println(color_util.Yellow(fmt.Sprintf("本次爬虫并发量限制为%d", info.Concurrent)))
 
 	// 爬取章节列表，error进行retry
+	log.Println("开始获取章节目录...")
 	fl := fetcher_list.Fatory.CreateFetcher(url)
 	chapters := make([]chapter_interf.Chapter, 0)
 	err := common_util.Retry(func() error {
@@ -42,6 +43,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 		log.Println(color_util.Red(err.Error()))
 		return
 	}
+	log.Println(color_util.Green("已获取章节目录"))
 
 	// 创建文件
 	f, err := os.Create(fileName)
@@ -86,16 +88,15 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 			}
 			sc[idx] <- 1
 		}(i)
-		go func(idx int) {
-			_ = <-sc[idx]
-			ch := chapter_handler.Handler{}
-			if err = ch.Save(f, &chapters[idx]); err != nil {
-				log.Println(color_util.Red("文件写入错误" + err.Error()))
-			}
-			bar.Increment()
-		}(i)
 	}
-
+	for i := 0; i < len(chapters); i++ {
+		_ = <-sc[i]
+		ch := chapter_handler.Handler{}
+		if err = ch.Save(f, &chapters[i]); err != nil {
+			log.Println(color_util.Red("文件写入错误" + err.Error()))
+		}
+		bar.Increment()
+	}
 	p.Wait()
 
 	if len(errChapters) > 0 {
@@ -105,8 +106,10 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 		}
 	}
 
-	ed := time.Now().Second()
-	min := (ed - st) / 60
-	sec := (ed - st) % 60
-	log.Println(color_util.Green(fmt.Sprintf("爬取结束，共用时%d分%d秒，共发起%d次http请求", min, sec, variable.RequestCount)))
+	ed := time.Now().UnixMilli()
+	st /= 1000
+	ed /= 1000
+	minute := (ed - st) / 60
+	second := (ed - st) % 60
+	log.Println(color_util.Green(fmt.Sprintf("爬取结束，共用时%d分%d秒，共发起%d次http请求", minute, second, variable.RequestCount)))
 }

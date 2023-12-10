@@ -4,6 +4,7 @@ import (
 	"log"
 	u "net/url"
 	"novel_crawler/crawler/filter"
+	"novel_crawler/crawler/getter_next"
 	"novel_crawler/crawler/info"
 	"novel_crawler/crawler/requester"
 	"novel_crawler/crawler/utils/color_util"
@@ -11,7 +12,6 @@ import (
 )
 
 func init() {
-	log.SetFlags(log.LstdFlags)
 
 	if err := info.ReadYaml("info"); err != nil {
 		log.Println(color_util.Red("未发现配置文件或文件格式错误 " + err.Error()))
@@ -25,4 +25,6 @@ func init() {
 func InitByUrl(url *u.URL) {
 	variable.Requester = requester.Factory.CreateRequester(url)
 	variable.Filter = filter.Factory.CreateFilter(url)
+	variable.GetterNextContent = getter_next.Factory.CreateContentNextGetter(url)
+	variable.GetterNextChapterList = getter_next.Factory.CreateChapterListNextGetter(url)
 }
