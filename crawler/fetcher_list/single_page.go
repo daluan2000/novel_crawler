@@ -34,7 +34,7 @@ func (s *singlePageFetcher) Fetch(url *u.URL) ([]chapter_interf.Chapter, error) 
 					if strings.HasPrefix(pathUrl.String(), "http") {
 						r = append(r, chapter_interf.Chapter{
 							Url:   pathUrl,
-							Title: string(bts),
+							Title: str_util.RemovePreSufBlank(string(bts)),
 						})
 					}
 				}

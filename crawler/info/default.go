@@ -6,8 +6,9 @@ import (
 )
 
 var baseReplace = map[string]string{
-	"聽":      "",
+	"聽":       "",
 	"</br>":   "\n",
+	"<br/>":   "\n",
 	"<br>":    "\n",
 	"<p>":     "\n",
 	"</p>":    "\n",
@@ -16,6 +17,7 @@ var baseReplace = map[string]string{
 	"<div>":   "\n",
 	"</div>":  "\n",
 	" ":       "",
+	"\u0010":  "",
 }
 var defaultRFL = info_interf.FrequencyLimit{
 	Concurrent: 50,

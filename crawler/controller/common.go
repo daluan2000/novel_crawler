@@ -84,7 +84,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 			if hasErr {
 				chapters[idx].Err = err
 				errChapters = append(errChapters, chapters[idx])
-				log.Println(color_util.Red(chapters[idx].Title + err.Error()))
+				log.Println(color_util.Red(chapters[idx].Title + err.Error() + "\n"))
 			}
 			sc[idx] <- 1
 		}(i)
@@ -102,7 +102,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 	if len(errChapters) > 0 {
 		log.Println(color_util.Red("由于某些原因，下列章节爬取错误"))
 		for _, v := range errChapters {
-			log.Println(color_util.Red(fmt.Sprintf("%s，错误原因：%s\n", v.Title, v.Err.Error())))
+			log.Println(color_util.Red(fmt.Sprintf("%s，错误原因：%s", v.Title, v.Err.Error())))
 		}
 	}
 
