@@ -1,6 +1,7 @@
 package variable
 
 import (
+	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/filter/filter_interf"
 	"novel_crawler/crawler/getter_next/getter_next_interf"
 	"novel_crawler/crawler/info/info_interf"
@@ -14,7 +15,8 @@ var (
 	GetterNextContent     getter_next_interf.Getter
 	GetterNextChapterList getter_next_interf.Getter
 
-	Filter filter_interf.Filter
+	Filter         filter_interf.Filter
+	ChapterHandler chapter_interf.Handler
 )
 
 var (

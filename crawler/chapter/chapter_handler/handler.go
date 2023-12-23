@@ -23,6 +23,11 @@ func (h *Handler) Save(f *os.File, c *chapter_interf.Chapter) error {
 	return err
 }
 
+func (h *Handler) generateTitle(c *chapter_interf.Chapter) error {
+	c.Title = str_util.RemovePreSufBlank(c.Title)
+	return nil
+}
+
 func (h *Handler) generateText(c *chapter_interf.Chapter) error {
 	// 删除content文本中的某些标签
 	var err error
@@ -48,7 +53,7 @@ func (h *Handler) generateText(c *chapter_interf.Chapter) error {
 	return nil
 }
 
-func (h *Handler) generateFinal(c *chapter_interf.Chapter) {
+func (h *Handler) generateFinal(c *chapter_interf.Chapter) error {
 	finalContent := strings.Split(c.ContentText, "\n")
 	for i := 0; i < len(finalContent); i++ {
 		finalContent[i] = str_util.RemovePreSufBlank(finalContent[i])
@@ -60,13 +65,17 @@ func (h *Handler) generateFinal(c *chapter_interf.Chapter) {
 			c.ContentFinal = append(c.ContentFinal, finalContent[i])
 		}
 	}
-
+	return nil
 }
 func (h *Handler) DoBeforeSave(c *chapter_interf.Chapter) error {
-	err := h.generateText(c)
+	err := h.generateTitle(c)
 	if err != nil {
 		return err
 	}
-	h.generateFinal(c)
-	return nil
+	err = h.generateText(c)
+	if err != nil {
+		return err
+	}
+	err = h.generateFinal(c)
+	return err
 }

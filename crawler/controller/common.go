@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	u "net/url"
-	"novel_crawler/crawler/chapter/chapter_handler"
 	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/fetcher_content"
 	"novel_crawler/crawler/fetcher_list"
@@ -74,7 +73,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 
 			err := errors.New("")
 			fc := fetcher_content.Factory.CreateFetcher(chapters[idx].Url)
-			ch := chapter_handler.Handler{}
+			ch := variable.ChapterHandler
 			hasErr := true
 			if err = fc.Fetch(&chapters[idx]); err == nil {
 				if err = ch.DoBeforeSave(&chapters[idx]); err == nil {
@@ -91,7 +90,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 	}
 	for i := 0; i < len(chapters); i++ {
 		_ = <-sc[i]
-		ch := chapter_handler.Handler{}
+		ch := variable.ChapterHandler
 		if err = ch.Save(f, &chapters[i]); err != nil {
 			log.Println(color_util.Red("文件写入错误" + err.Error()))
 		}

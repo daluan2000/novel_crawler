@@ -54,9 +54,12 @@ func (c *common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
 	}
 
 	dom, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
 	// 手动赋值
 	dom.Url = url
-
-	return dom, err
+	return dom, nil
 
 }

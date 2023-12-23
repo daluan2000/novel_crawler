@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"log"
 	u "net/url"
+	"novel_crawler/crawler/chapter/chapter_handler"
 	"novel_crawler/crawler/filter"
 	"novel_crawler/crawler/getter_next"
 	"novel_crawler/crawler/info"
@@ -25,6 +26,7 @@ func init() {
 func InitByUrl(url *u.URL) {
 	variable.Requester = requester.Factory.CreateRequester(url)
 	variable.Filter = filter.Factory.CreateFilter(url)
+	variable.ChapterHandler = chapter_handler.Factory.CreateHandler(url)
 	variable.GetterNextContent = getter_next.Factory.CreateContentNextGetter(url)
 	variable.GetterNextChapterList = getter_next.Factory.CreateChapterListNextGetter(url)
 }
