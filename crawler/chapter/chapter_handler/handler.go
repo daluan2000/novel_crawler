@@ -6,6 +6,7 @@ import (
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
 	"os"
+	"regexp"
 	"strings"
 )
 
@@ -17,7 +18,7 @@ func (h *Handler) Save(f *os.File, c *chapter_interf.Chapter) error {
 	if variable.SaveTitle {
 		str += c.Title + "\n"
 	}
-	str += "支持正版，人人有责\n支持正版，人人有责\n"
+	str += "begin\n"
 	str += strings.Join(c.ContentFinal, "\n") + "\n"
 	_, err := f.WriteString(str)
 	return err
@@ -40,7 +41,11 @@ func (h *Handler) generateText(c *chapter_interf.Chapter) error {
 	}
 
 	// 对text进行替换
-	for k, v := range variable.InfoStore.GetBaseReplace() {
+	for k, v := range variable.InfoStore.GetBaseRegReplace() {
+		reg := regexp.MustCompile(k)
+		c.ContentText = reg.ReplaceAllString(c.ContentText, v)
+	}
+	for k, v := range variable.InfoStore.GetBaseStrReplace() {
 		c.ContentText = strings.Replace(c.ContentText, k, v, -1)
 	}
 	for k, v := range variable.InfoStore.GetInfo(c.Url).StrReplace {

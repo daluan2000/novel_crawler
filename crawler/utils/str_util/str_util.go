@@ -2,10 +2,12 @@ package str_util
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/PuerkitoBio/goquery"
 	"golang.org/x/text/encoding/simplifiedchinese"
 	"golang.org/x/text/transform"
 	"io"
+	"regexp"
 	"slices"
 	"strings"
 	"unicode/utf8"
@@ -80,4 +82,13 @@ func RemoveSufBlank(s string) string {
 
 func RemovePreSufBlank(s string) string {
 	return RemoveSufBlank(RemovePreBlank(s))
+}
+
+// TagRegexp 返回匹配标签的正则字符串，反引号包裹的字符串不会被转义
+func TagRegexp(tag string) []string {
+	st := fmt.Sprintf(`<%s\s*>|<%s\s+.*?>`, tag, tag)
+	ed := fmt.Sprintf(`</%s>`, tag)
+	_ = regexp.MustCompile(st)
+	_ = regexp.MustCompile(ed)
+	return []string{st, ed}
 }

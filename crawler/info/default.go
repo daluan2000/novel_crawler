@@ -2,23 +2,25 @@ package info
 
 import (
 	"novel_crawler/crawler/info/info_interf"
+	"novel_crawler/crawler/utils/str_util"
 	"time"
 )
 
-var baseReplace = map[string]string{
-	"聽":       "",
-	"</br>":   "\n",
-	"<br/>":   "\n",
-	"<br>":    "\n",
-	"<p>":     "\n",
-	"</p>":    "\n",
-	"<span>":  "\n",
-	"</span>": "\n",
-	"<div>":   "\n",
-	"</div>":  "\n",
-	" ":       "",
-	"\u0010":  "",
+var baseStrReplace = map[string]string{
+	"聽":      "",
+	" ":      "",
+	"\u0010": "",
 }
+var baseRegReplace = map[string]string{
+	`<br[\s/]*?>`:                 "\n",
+	str_util.TagRegexp("div")[0]:  "\n",
+	str_util.TagRegexp("div")[1]:  "\n",
+	str_util.TagRegexp("span")[0]: "\n",
+	str_util.TagRegexp("span")[1]: "\n",
+	str_util.TagRegexp("p")[0]:    "\n",
+	str_util.TagRegexp("p")[1]:    "\n",
+}
+
 var defaultRFL = info_interf.FrequencyLimit{
 	Concurrent: 50,
 	Gap:        time.Millisecond * 0,

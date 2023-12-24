@@ -11,8 +11,11 @@ type store struct {
 func (g *store) GetInfo(url *u.URL) info_interf.Info {
 	return infoMap[url.Hostname()]
 }
-func (g *store) GetBaseReplace() map[string]string {
-	return baseReplace
+func (g *store) GetBaseStrReplace() map[string]string {
+	return baseStrReplace
+}
+func (g *store) GetBaseRegReplace() map[string]string {
+	return baseRegReplace
 }
 func (g *store) Exist(url *u.URL) bool {
 	_, ok := infoMap[url.Hostname()]
