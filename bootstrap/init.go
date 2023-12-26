@@ -14,14 +14,13 @@ import (
 
 func init() {
 
-	if err := info.ReadYaml("info"); err != nil {
+	variable.InfoStore = info.CreateStore()
+	if err := variable.InfoStore.ReadYaml("info"); err != nil {
 		log.Println(color_util.Red("未发现配置文件或文件格式错误 " + err.Error()))
 	} else {
 		log.Println(color_util.Green("已读取配置文件"))
 	}
-
-	info.InitInfo()
-	variable.InfoStore = info.CreateStore()
+	variable.InfoStore.FillInfoDefault()
 }
 func InitByUrl(url *u.URL) {
 	variable.Requester = requester.Factory.CreateRequester(url)

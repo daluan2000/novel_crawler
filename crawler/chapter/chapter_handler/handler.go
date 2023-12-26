@@ -41,12 +41,9 @@ func (h *Handler) generateText(c *chapter_interf.Chapter) error {
 	}
 
 	// 对text进行替换
-	for k, v := range variable.InfoStore.GetBaseRegReplace() {
+	for k, v := range variable.InfoStore.GetInfo(c.Url).RegReplace {
 		reg := regexp.MustCompile(k)
 		c.ContentText = reg.ReplaceAllString(c.ContentText, v)
-	}
-	for k, v := range variable.InfoStore.GetBaseStrReplace() {
-		c.ContentText = strings.Replace(c.ContentText, k, v, -1)
 	}
 	for k, v := range variable.InfoStore.GetInfo(c.Url).StrReplace {
 		c.ContentText = strings.Replace(c.ContentText, k, v, -1)

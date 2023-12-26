@@ -21,7 +21,7 @@ var baseRegReplace = map[string]string{
 	str_util.TagRegexp("p")[1]:    "\n",
 }
 
-var defaultRFL = info_interf.FrequencyLimit{
+var defaultFL = info_interf.FrequencyLimit{
 	Concurrent: 50,
 	Gap:        time.Millisecond * 0,
 }

@@ -45,7 +45,7 @@ type NextContent struct {
 
 type InfoStore interface {
 	GetInfo(url *u.URL) Info
+	ReadYaml(fileName string) error
 	Exist(url *u.URL) bool
-	GetBaseStrReplace() map[string]string
-	GetBaseRegReplace() map[string]string
+	FillInfoDefault()
 }

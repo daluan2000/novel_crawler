@@ -5,29 +5,6 @@ import (
 	"time"
 )
 
-func InitInfo() {
-	for k, _ := range infoMap {
-		// 把未限制并发的，设为默认并发值
-		if infoMap[k].Concurrent == 0 {
-			tmp := infoMap[k]
-			tmp.FrequencyLimit = defaultRFL
-			infoMap[k] = tmp
-		}
-
-		if infoMap[k].RemoveSelector == nil {
-			tmp := infoMap[k]
-			tmp.RemoveSelector = make([]string, 0)
-			infoMap[k] = tmp
-		}
-
-		if infoMap[k].StrReplace == nil {
-			tmp := infoMap[k]
-			tmp.StrReplace = make(map[string]string, 0)
-			infoMap[k] = tmp
-		}
-	}
-}
-
 /*
 网站的一切信息存在此文件的数据结构里
 包括选择器、filter、fetcher等等
