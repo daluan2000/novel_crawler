@@ -9,6 +9,9 @@ Info:
       "\u807d": " "
       "<br>":   ""
       "<br/>":  ""
+    RegReplace:
+      # 单引号不会进行转义处理，用来存放正则表达式
+      '<br[\s/]*?>': ""
 
   "www.bige3.cc":
     ASelector: "dl dd > a:not(a[rel='nofollow'])"

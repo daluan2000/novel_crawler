@@ -27,12 +27,6 @@ var infoMap = map[string]info_interf.Info{
 		RemoveSelector:  []string{"p"},
 	},
 
-	// 笔趣阁 该网站搜索时会进行人机检测，防止人机验证加载不出来，最好使用chrome浏览器，
-	"www.52bqg.org": {
-		ASelector:       "dd > a",
-		ContentSelector: "#content",
-	},
-
 	"www.ujxsw.net": {
 		ASelector:       "#readerlist > ul > li > a",
 		ContentSelector: ".read-content > p",
@@ -62,22 +56,6 @@ var infoMap = map[string]info_interf.Info{
 		RemoveSelector:  []string{"div", "p[style*='color']"},
 	},
 
-	// 好笔阁
-	"www.bixiashenghua.com": {
-		ASelector:       "#list > dl > dd > a",
-		ContentSelector: "#content",
-	},
-
-	// 千叶阁 sb网站限制频率
-	"www.qianyege.com": {
-		ASelector:       "#list > dl > dd > a",
-		ContentSelector: "#content",
-		RemoveSelector:  []string{"div"},
-		FrequencyLimit: info_interf.FrequencyLimit{
-			Concurrent: 4,
-			Gap:        time.Millisecond * 250,
-		},
-	},
 	// 笔趣阁
 	"www.biquinfo.com": {
 		ASelector:       "#section-list > li > a",
@@ -184,22 +162,19 @@ var infoMap = map[string]info_interf.Info{
 		ASelector:       ".section-box:nth-child(4) li > a",
 		ContentSelector: "#content",
 	},
+}
 
-	// 和上面那个一模一样
+// 防止冗余，如果有两个网站info相同，可以直接记录在这里，同时支持并发限制自定义
+var sameWith = map[string]info_interf.SameInfo{
 	"www.ddxs.vip": {
-		NextChapterList: info_interf.NextChapterList{
-			MultiPageChapterList:    true,
-			ChapterListNextSelector: "a.index-container-btn:last-child",
-			ChapterListNextStr:      "下一页",
-		},
-
-		NextContent: info_interf.NextContent{
-			MultiPageContent:    true,
-			ContentNextStr:      "下一页",
-			ContentNextSelector: "#next_url",
-		},
-
-		ASelector:       ".section-box:nth-child(4) li > a",
-		ContentSelector: "#content",
+		Host: "www.biqge.org",
+	},
+	"www.bixiashenghua.com": {
+		Host: "www.beqege.com",
+	},
+	// 笔趣阁 该网站搜索时会进行人机检测，防止人机验证加载不出来，最好使用chrome浏览器，
+	"www.52bqg.org": {
+		Host:           "www.beqege.com",
+		FrequencyLimit: defaultFL,
 	},
 }

@@ -1,0 +1,12 @@
+// 千叶阁 sb网站限制频率
+"www.qianyege.com": {
+    ASelector:       "#list > dl > dd > a",
+    ContentSelector: "#content",
+    RemoveSelector:  []string{"div"},
+    FrequencyLimit: info_interf.FrequencyLimit{
+        Concurrent: 4,
+        Gap:        time.Millisecond * 250,
+    },
+},
+
+

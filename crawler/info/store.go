@@ -60,8 +60,19 @@ func (s *store) FillInfoDefault() {
 	infoMap = filledInfoMap
 }
 
+func (s *store) GetInfoByHost(host string) info_interf.Info {
+	res := infoMap[host]
+	if v, ok := sameWith[host]; ok {
+		res = infoMap[v.Host]
+		if v.FrequencyLimit.Concurrent != 0 {
+			res.FrequencyLimit = v.FrequencyLimit
+		}
+	}
+	return res
+}
+
 func (s *store) GetInfo(url *u.URL) info_interf.Info {
-	return infoMap[url.Hostname()]
+	return s.GetInfoByHost(url.Hostname())
 }
 
 func (s *store) Exist(url *u.URL) bool {

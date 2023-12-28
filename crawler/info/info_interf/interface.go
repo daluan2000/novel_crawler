@@ -43,6 +43,12 @@ type NextContent struct {
 	ContentNextStr      string
 }
 
+// SameInfo 记录有相同info的网站，基础info是相同的，但并发限制可以自定义
+type SameInfo struct {
+	Host string
+	FrequencyLimit
+}
+
 type InfoStore interface {
 	GetInfo(url *u.URL) Info
 	ReadYaml(fileName string) error
