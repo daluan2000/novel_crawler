@@ -3,6 +3,6 @@ package consts
 import "time"
 
 const (
-	RetryCount = 5
+	RetryCount = 10
 	RetrySleep = time.Second
 )

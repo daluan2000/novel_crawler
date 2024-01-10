@@ -17,8 +17,10 @@ func main() {
 	var urlStr = flag.String("u", "", "url链接")
 	var saveTitle = flag.Int("st", 1, "保存tittle为1，不保存title为2，不输入该参数默认为1")
 	var logLevel = flag.Int("log", 1, "默认为1，打印详细log为2")
+	var fillTitle = flag.Int("ft", 1, "不改变标题为1，填充标题编号为2，不输入该参数默认为1")
 	flag.Parse()
 	variable.SaveTitle = *saveTitle == 1
+	variable.FillTitle = *fillTitle == 2
 	if *logLevel == 2 {
 		log.SetFlags(log.LstdFlags | log.Lshortfile)
 	} else {

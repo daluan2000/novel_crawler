@@ -82,10 +82,8 @@ var infoMap = map[string]info_interf.Info{
 	"www.xsbiquge.la": {
 		ASelector:       ".listmain > dl > dd > a",
 		ContentSelector: "#content",
-		StrReplace: map[string]string{
-			"<p class=\"content_detail\">": "",
-		},
 	},
+
 	/*------------------------------------分割线-------------------------------------------------------------------------------------*/
 	/*------------------------------------分割线-------------------------------------------------------------------------------------*/
 	/*------------------------------------分割线-------------------------------------------------------------------------------------*/
@@ -170,6 +168,9 @@ var sameWith = map[string]info_interf.SameInfo{
 		Host: "www.biqge.org",
 	},
 	"www.bixiashenghua.com": {
+		Host: "www.beqege.com",
+	},
+	"www.83ks.net": {
 		Host: "www.beqege.com",
 	},
 	// 笔趣阁 该网站搜索时会进行人机检测，防止人机验证加载不出来，最好使用chrome浏览器，

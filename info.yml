@@ -2,17 +2,7 @@
 
 Info:
 
-  "www.2biqu.com":
-    ASelector:       ".section-list > li > a"
-    ContentSelector: "#content"
-    StrReplace:
-      "\u807d": " "
-      "<br>":   ""
-      "<br/>":  ""
-    RegReplace:
-      # 单引号不会进行转义处理，用来存放正则表达式
-      '<br[\s/]*?>': ""
-
+  # 配置文件这里有点问题，需要调试一下
   "www.bige3.cc":
     ASelector: "dl dd > a:not(a[rel='nofollow'])"
     ContentSelector: "#chaptercontent"

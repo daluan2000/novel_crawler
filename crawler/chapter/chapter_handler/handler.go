@@ -2,6 +2,7 @@ package chapter_handler
 
 import (
 	"errors"
+	"fmt"
 	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/utils/str_util"
 	"novel_crawler/global/variable"
@@ -26,6 +27,9 @@ func (h *Handler) Save(f *os.File, c *chapter_interf.Chapter) error {
 
 func (h *Handler) generateTitle(c *chapter_interf.Chapter) error {
 	c.Title = str_util.RemovePreSufBlank(c.Title)
+	if variable.FillTitle {
+		c.Title = fmt.Sprintf("第%d章 ", c.Number) + c.Title
+	}
 	return nil
 }
 
