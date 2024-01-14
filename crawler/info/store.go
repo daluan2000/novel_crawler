@@ -34,7 +34,6 @@ func (s *store) ReadYaml(fileName string) error {
 func (s *store) FillInfoDefault() {
 	filledInfoMap := make(map[string]info_interf.Info)
 	for host, info := range infoMap {
-
 		if info.FrequencyLimit.Concurrent == 0 {
 			info.FrequencyLimit = defaultFL
 		}
@@ -55,6 +54,7 @@ func (s *store) FillInfoDefault() {
 			info.StrReplace[k] = v
 		}
 
+		// 因为遍历过程中不能修改map，所以要另存一个map里
 		filledInfoMap[host] = info
 	}
 	infoMap = filledInfoMap

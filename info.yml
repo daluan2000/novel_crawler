@@ -1,13 +1,13 @@
 
 
 Info:
-
-  # 配置文件这里有点问题，需要调试一下
-  "www.bige3.cc":
-    ASelector: "dl dd > a:not(a[rel='nofollow'])"
-    ContentSelector: "#chaptercontent"
-    StrReplace:
-      "\u807d": " "
-      "<br/><br/>": ""
-      "<br><br>": ""
+  # yaml中单引号包裹的字符串不会进行转义处理
+  # 不知道为何，匿名结构体里的属性不能直接写到最外层结构体里，比如FrequencyLimit里的属性
+  "www.wbsz.org":
+    ASelector: ".chapter > ul > li > a"
+    ContentSelector: ".readerCon"
+    RemoveSelector: ['script']
+    FrequencyLimit:
+      Concurrent: 4
+      Gap: 250ms
 
