@@ -22,6 +22,6 @@ var baseRegReplace = map[string]string{
 }
 
 var defaultFL = info_interf.FrequencyLimit{
-	Concurrent: 50,
-	Gap:        time.Millisecond * 0,
+	Concurrent: 20,
+	Gap:        time.Millisecond * 100,
 }

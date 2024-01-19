@@ -85,10 +85,10 @@ func RemovePreSufBlank(s string) string {
 }
 
 // TagRegexp 返回匹配标签的正则字符串，反引号包裹的字符串不会被转义
-func TagRegexp(tag string) []string {
+func TagRegexp(tag string) [2]string {
 	st := fmt.Sprintf(`<%s\s*>|<%s\s+.*?>`, tag, tag)
 	ed := fmt.Sprintf(`</%s>`, tag)
 	_ = regexp.MustCompile(st)
 	_ = regexp.MustCompile(ed)
-	return []string{st, ed}
+	return [2]string{st, ed}
 }
