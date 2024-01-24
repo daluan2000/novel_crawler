@@ -78,6 +78,7 @@ var infoMap = map[string]info_interf.Info{
 			Concurrent: 4,
 			Gap:        time.Millisecond * 250,
 		},
+		RemoveSelector: []string{"a"},
 	},
 	"www.xsbiquge.la": {
 		ASelector:       ".listmain > dl > dd > a",
@@ -183,5 +184,9 @@ var sameWith = map[string]info_interf.SameInfo{
 	"www.52bqg.org": {
 		Host:           "www.beqege.com",
 		FrequencyLimit: defaultFL,
+	},
+
+	"www.beqege.cc": {
+		Host: "www.beqege.com",
 	},
 }

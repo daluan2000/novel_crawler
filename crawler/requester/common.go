@@ -7,7 +7,6 @@ import (
 	"net/http"
 	u "net/url"
 	"novel_crawler/crawler/utils/common_util"
-	"novel_crawler/global/consts"
 	"novel_crawler/global/variable"
 	"time"
 )
@@ -31,12 +30,13 @@ func (c *common) CreateGoQuery(url *u.URL) (*goquery.Document, error) {
 
 	var resp *http.Response
 
+	// 这里应不应该加retry，这是个问题
 	// 发起请求
 	err := common_util.Retry(func() error {
 		var err1 error
 		resp, err1 = client.Do(req)
 		return err1
-	}, consts.RetryCount)
+	}, variable.RetryCount)
 
 	if err != nil {
 		return nil, err

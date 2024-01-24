@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	u "net/url"
@@ -10,7 +9,6 @@ import (
 	"novel_crawler/crawler/fetcher_list"
 	"novel_crawler/crawler/utils/color_util"
 	"novel_crawler/crawler/utils/common_util"
-	"novel_crawler/global/consts"
 	"novel_crawler/global/variable"
 	"os"
 	"time"
@@ -37,7 +35,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 		var err1 error
 		chapters, err1 = fl.Fetch(url)
 		return err1
-	}, consts.RetryCount)
+	}, variable.RetryCount)
 	if err != nil {
 		log.Println(color_util.Red(err.Error()))
 		return
@@ -63,41 +61,54 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 		go func(idx int) {
 
 			// 并发限制
+			// requester那里已做并发限制，这里还要再做一次，防止开始阶段分散爬取不同章节的第一页
 			glc <- 1
 			defer func() {
 				if gap > 0 {
+					// 这个睡眠是否有必要？
 					time.Sleep(gap)
 				}
 				_ = <-glc
 			}()
 
-			err := errors.New("")
 			fc := fetcher_content.Factory.CreateFetcher(chapters[idx].Url)
 			ch := variable.ChapterHandler
 			hasErr := true
-			if err = fc.Fetch(&chapters[idx]); err == nil {
-				if err = ch.DoBeforeSave(&chapters[idx]); err == nil {
-					hasErr = false
+
+			// 进行爬取，进行retry操作
+			err := common_util.Retry(func() error {
+				if err = fc.Fetch(&chapters[idx]); err == nil {
+					if err = ch.DoBeforeSave(&chapters[idx]); err == nil {
+						hasErr = false
+					}
 				}
-			}
+				return err
+			}, variable.RetryCount)
+
+			// 如果出错，则记录下来
 			if hasErr {
 				chapters[idx].Err = err
 				errChapters = append(errChapters, chapters[idx])
 				log.Println(color_util.Red(chapters[idx].Title + err.Error() + "\n"))
 			}
+			// 向管道发送信息，表明idx章节可以保存了
 			sc[idx] <- 1
 		}(i)
 	}
+
+	// 保存章节
 	for i := 0; i < len(chapters); i++ {
 		_ = <-sc[i]
 		ch := variable.ChapterHandler
 		if err = ch.Save(f, &chapters[i]); err != nil {
 			log.Println(color_util.Red("文件写入错误" + err.Error()))
 		}
+		// 进度条增加
 		bar.Increment()
 	}
 	p.Wait()
 
+	// 打印错误信息
 	if len(errChapters) > 0 {
 		log.Println(color_util.Red("由于某些原因，下列章节爬取错误"))
 		for _, v := range errChapters {
@@ -105,6 +116,7 @@ func (c *common) DoCrawling(url *u.URL, fileName string) {
 		}
 	}
 
+	// 打印时间信息
 	ed := time.Now().UnixMilli()
 	st /= 1000
 	ed /= 1000

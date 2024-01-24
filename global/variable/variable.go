@@ -6,6 +6,7 @@ import (
 	"novel_crawler/crawler/getter_next/getter_next_interf"
 	"novel_crawler/crawler/info/info_interf"
 	"novel_crawler/crawler/requester/requester_interf"
+	"time"
 )
 
 var (
@@ -23,4 +24,7 @@ var (
 	FillTitle    = false
 	SaveTitle    = true
 	RequestCount = 0
+
+	RetryCount = 10
+	RetrySleep = time.Second
 )

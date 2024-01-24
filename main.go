@@ -18,11 +18,15 @@ func main() {
 	var saveTitle = flag.Int("st", 1, "保存tittle为1，不保存title为2，不输入该参数默认为1")
 	var logLevel = flag.Int("log", 1, "默认为1，打印详细log为2")
 	var fillTitle = flag.Int("ft", 1, "不改变标题为1，填充标题编号为2，不输入该参数默认为1")
+	var retryCount = flag.Int("rc", 10, "重新尝试的次数，默认为10")
+	var retrySleep = flag.Duration("rs", 250*time.Millisecond, "retry时的休眠时间，默认250ms")
 	flag.Parse()
 	variable.SaveTitle = *saveTitle == 1
 	variable.FillTitle = *fillTitle == 2
+	variable.RetryCount = *retryCount
+	variable.RetrySleep = *retrySleep
 	if *logLevel == 2 {
-		log.SetFlags(log.LstdFlags | log.Lshortfile)
+		log.SetFlags(log.LstdFlags | log.Llongfile)
 	} else {
 		log.SetFlags(log.Ltime)
 	}
