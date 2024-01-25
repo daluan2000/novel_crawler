@@ -11,8 +11,7 @@ import (
 	"time"
 )
 
-func main() {
-
+func parseFlag() {
 	var fileName = flag.String("f", "", "保存文件名")
 	var urlStr = flag.String("u", "", "url链接")
 	var saveTitle = flag.Int("st", 1, "保存tittle为1，不保存title为2，不输入该参数默认为1")
@@ -21,6 +20,7 @@ func main() {
 	var retryCount = flag.Int("rc", 10, "重新尝试的次数，默认为10")
 	var retrySleep = flag.Duration("rs", 250*time.Millisecond, "retry时的休眠时间，默认250ms")
 	flag.Parse()
+	variable.FileName = *fileName
 	variable.SaveTitle = *saveTitle == 1
 	variable.FillTitle = *fillTitle == 2
 	variable.RetryCount = *retryCount
@@ -37,9 +37,18 @@ func main() {
 		return
 	}
 
-	bootstrap.InitByUrl(url)
-	cl := controller.Factory.CreateController(url)
-	cl.DoCrawling(url, *fileName+".txt")
+	variable.Url = url
+
+}
+
+func main() {
+
+	parseFlag()
+
+	bootstrap.InitByUrl(variable.Url)
+
+	cl := controller.Factory.CreateController(variable.Url)
+	cl.DoCrawling(variable.Url, variable.FileName+".txt")
 
 	time.Sleep(time.Second)
 }

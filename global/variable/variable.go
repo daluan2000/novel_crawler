@@ -1,6 +1,7 @@
 package variable
 
 import (
+	u "net/url"
 	"novel_crawler/crawler/chapter/chapter_interf"
 	"novel_crawler/crawler/filter/filter_interf"
 	"novel_crawler/crawler/getter_next/getter_next_interf"
@@ -27,4 +28,7 @@ var (
 
 	RetryCount = 10
 	RetrySleep = time.Second
+
+	Url      *u.URL = nil
+	FileName        = ""
 )
