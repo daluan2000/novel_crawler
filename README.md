@@ -8,7 +8,7 @@
 
 爬取网站上小说章节的内容，并以txt形式保存在本地。
 
-程序运行需要的参数如下，带默认值default的参数可以不输入：
+程序运行需要的参数如下，带默认值default的参数可以不输入，其余参数必须输入：
 
 | 参数名  | 参数值                                          | 样例                              |
 |------|----------------------------------------------|---------------------------------|
@@ -31,9 +31,9 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 
 **注意，这里文档没有更新，下面内容只展示部分已支持的网站，**
 
-**所有已支持网站的信息位于/info/info.go**
+**所有已支持网站的信息位于[/crawler/info/info.go](./crawler/info/info.go)，由于时间久远，可能有些网站已经g了**
 
-未支持网站，可使用[自定义配置文件](#自定义配置文件)功能自行添加
+对于未支持的网站，可使用[自定义配置文件](#自定义配置文件)功能自行添加
 
 
 1. www.2biqu.com 笔趣阁，使用样例如下：
@@ -88,15 +88,7 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 .\novel_crawler.exe -f 优等生不需要超能力.txt -u https://www.wbsz.org/18874/
 ```
 
-10. m.wfxs.tw 微風小說網
-
-这个网站有妖，有时爬的成功，有时爬不成功，报错`read tcp 192.168.16.86:58143->104.26.2.82:443: wsarecv: An existing connection was forcibly closed by the remote host.`。太底层了我看不懂，有待学习。
-
-```shell
-.\novel_crawler.exe -u https://m.wfxs.tw/xs-2217283/ -f 下山就無敵，總裁倒追我 
-```
-
-11. www.xbiqugeo.com 新笔趣阁，使用样例如下：
+10. www.xbiqugeo.com 新笔趣阁，使用样例如下：
 
 sb网站禁止搜索
 
@@ -104,25 +96,35 @@ sb网站禁止搜索
 .\novel_crawler.exe -f 少年歌行 -u https://www.xbiqugeo.com/shu/6420/  
 ```
 
-12. www.zrfsxs.com 择日小说网，使用样例如下：
+11. www.zrfsxs.com 择日小说网，使用样例如下：
 
 ```shell
 .\novel_crawler.exe -f 深空彼岸 -u https://www.zrfsxs.com/xiaoshuo/42/
 ```
 
-13. youyouxs.com 友友小说网
+12. youyouxs.com 友友小说网
 
 ```shell
 .\novel_crawler.exe -u https://youyouxs.com/xs_350417/zjml_1 -f 超能力者不想受欢迎
 ```
 
-14. www.biqge.org 笔奇阁
+13. www.biqge.org 笔奇阁
 
 ```shell
 .\novel_crawler.exe -u https://www.biqge.org/book/17130/ -f 修仙就是这样的
 ```
 
+14. m.wfxs.tw 微風小說網
+
+这个网站有妖，有时爬的成功，有时爬不成功，报错`read tcp 192.168.16.86:58143->104.26.2.82:443: wsarecv: An existing connection was forcibly closed by the remote host.`。太底层了我看不懂，有待学习。
+
+```shell
+.\novel_crawler.exe -u https://m.wfxs.tw/xs-2217283/ -f 下山就無敵，總裁倒追我 
+```
+
 ## 自定义配置文件
+
+### 数据结构
 
 在novel_crawler.exe所在目录下创建info.yml文件，在文件中写入`map[string]Info`类型的信息，key值设置为info，在源代码中`Info`结构体如下：
 
@@ -174,6 +176,8 @@ type NextContent struct {
 }
 
 ```
+
+### 配置文件格式
 
 info.yml文件的具体格式如下面所示，可以同时配置多个网站。
 
