@@ -5,42 +5,50 @@ import (
 	"time"
 )
 
+// Info结构体
 type Info struct {
-	ASelector       string
+	// 目录页面，各章节标题a标签的选择器
+	ASelector string
+	// 章节内容页面，小说内容的选择器
 	ContentSelector string
-
-	// 关于字符串替换，有几点要注意：
-	// 1. 代码文件的编码格式为utf-8，小说文件的编码格式也应该为utf-8，这样才能保证替换的结果是正确的
-	// 2. UTF-8是Unicode的一种实现方式，某些非utf-8编码的字符，在进行编码转换后可能出现乱码现象，这时直接百度搜索对应的unicode编码，然后替换即可
-	//    比如对于GBK编码下的&nbsp空格字符，在转换为utf8后它的显示为 聽 \u807d，下面一行做了替换
+	// html文本替换字符串
 	StrReplace map[string]string
-
+	// html文本替换字符串，正则表达式形式
 	RegReplace map[string]string
-
-	// 字符串中删除一些标签
+	// html文本中要删除的标签对应的选择器
 	RemoveSelector []string
 
 	FrequencyLimit
 	NextChapterList
 	NextContent
 }
+
+// 并发限制，有默认值
 type FrequencyLimit struct {
-	// 并发量限制
+	// 并发数量限制
 	Concurrent int
 	// 每次请求后线程的休眠时间
 	Gap time.Duration
 }
 
+// 目录为分页展示时，需要加上此部分信息
 type NextChapterList struct {
-	MultiPageChapterList    bool
+	// 如果分页展示，设置为true
+	MultiPageChapterList bool
+	// 目录页面中，下一页a标签的选择器
 	ChapterListNextSelector string
-	ChapterListNextStr      string
+	// 目录页面中，下一页a标签应包含的文本
+	ChapterListNextStr string
 }
 
+// 章节内容分页展示时，需要加上此部分信息
 type NextContent struct {
-	MultiPageContent    bool
+	// 如果分页展示，设置为true
+	MultiPageContent bool
+	// 章节内容页面中，下一页a标签的选择器
 	ContentNextSelector string
-	ContentNextStr      string
+	// 章节内容页面中，下一页a标签应包含的文本
+	ContentNextStr string
 }
 
 // SameInfo 记录有相同info的网站，基础info是相同的，但并发限制可以自定义

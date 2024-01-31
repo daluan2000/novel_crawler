@@ -8,12 +8,17 @@
 
 爬取网站上小说章节的内容，并以txt形式保存在本地。
 
-程序运行需要的参数如下：
+程序运行需要的参数如下，带默认值default的参数可以不输入：
 
-| 参数名 | 参数值          | 样例                              |
-|-----|--------------|---------------------------------|
-| -f  | 保存在本地的文件名    | 斗破苍穹                            |
-| -u  | 小说章节列表的url链接 | https://www.52bqg.org/book_361/ |
+| 参数名  | 参数值                                          | 样例                              |
+|------|----------------------------------------------|---------------------------------|
+| -f   | 保存在本地的文件名                                    | 斗破苍穹                            |
+| -u   | 小说章节列表的url链接                                 | https://www.52bqg.org/book_361/ |
+| -ft  | 不改变标题为1，填充标题编号为2，不输入该参数默认为1 (default 1)      | 1                               |
+| -log | 默认为1，打印详细log为2 (default 1)                   | 1                               |
+| -rc  | 重新尝试的次数，默认为10 (default 10)                   | 10                              |
+| -rs  | retry时的休眠时间，默认250ms (default 250ms)          | 250ms                           |
+| -st  | 保存tittle为1，不保存title为2，不输入该参数默认为1 (default 1) | 1                               |
 
 使用样例如下：
 ```shell
@@ -24,12 +29,12 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 
 ## 已支持网站
 
-本爬虫的适应性非常强，只需经过简易的拓展，便基本能够爬取所有的公开小说网站（指那些不需要登陆就能阅读小说的网站）。
+**注意，这里文档没有更新，下面内容只展示部分已支持的网站，**
 
-我这里只随便弄了几个网站作为样例，如果需要爬更多的网站那么告诉我网址就好，我这边稍微修改下程序就可以了。
+**所有已支持网站的信息位于/info/info.go**
 
+未支持网站，可使用[自定义配置文件](#自定义配置文件)功能自行添加
 
-### 第一类网站
 
 1. www.2biqu.com 笔趣阁，使用样例如下：
 
@@ -65,26 +70,33 @@ novel_crawler.exe -f 斗破苍穹 -u https://www.52bqg.org/book_361/
 .\novel_crawler.exe -f 我的后桌居然是珈百璃 -u http://www.trxs.cc/tongren/3650.html
 ```
 
-6. www.00txt.com 科幻小说网，出版科幻小说
+7. www.00txt.com 科幻小说网，出版科幻小说
 
 ```shell
 .\novel_crawler.exe -u http://www.00txt.com/santi/ -f 三体
 ```
 
-7. www.1688by.com 好笔阁
+8. www.1688by.com 好笔阁
 
 ```shell
 .\novel_crawler.exe -f 我真不是邪神走狗 -u https://www.1688by.com/book/203501
 ```
 
-8. www.wbsz.org 完本神站
+9. www.wbsz.org 完本神站
 
 ```shell
-go run .\main.go -f 优等生不需要超能力.txt -u https://www.wbsz.org/18874/
+.\novel_crawler.exe -f 优等生不需要超能力.txt -u https://www.wbsz.org/18874/
 ```
-### 第二类网站
 
-1. www.xbiqugeo.com 新笔趣阁，使用样例如下：
+10. m.wfxs.tw 微風小說網
+
+这个网站有妖，有时爬的成功，有时爬不成功，报错`read tcp 192.168.16.86:58143->104.26.2.82:443: wsarecv: An existing connection was forcibly closed by the remote host.`。太底层了我看不懂，有待学习。
+
+```shell
+.\novel_crawler.exe -u https://m.wfxs.tw/xs-2217283/ -f 下山就無敵，總裁倒追我 
+```
+
+11. www.xbiqugeo.com 新笔趣阁，使用样例如下：
 
 sb网站禁止搜索
 
@@ -92,20 +104,108 @@ sb网站禁止搜索
 .\novel_crawler.exe -f 少年歌行 -u https://www.xbiqugeo.com/shu/6420/  
 ```
 
-2. www.zrfsxs.com 择日小说网，使用样例如下：
+12. www.zrfsxs.com 择日小说网，使用样例如下：
 
 ```shell
 .\novel_crawler.exe -f 深空彼岸 -u https://www.zrfsxs.com/xiaoshuo/42/
 ```
 
-3. youyouxs.com 友友小说网
+13. youyouxs.com 友友小说网
 
 ```shell
 .\novel_crawler.exe -u https://youyouxs.com/xs_350417/zjml_1 -f 超能力者不想受欢迎
 ```
 
-4. www.biqge.org 笔奇阁
+14. www.biqge.org 笔奇阁
 
 ```shell
 .\novel_crawler.exe -u https://www.biqge.org/book/17130/ -f 修仙就是这样的
+```
+
+## 自定义配置文件
+
+在novel_crawler.exe所在目录下创建info.yml文件，在文件中写入`map[string]Info`类型的信息，key值设置为info，在源代码中`Info`结构体如下：
+
+```go
+// Info结构体
+type Info struct {
+	// 目录页面，各章节标题a标签的选择器
+	ASelector       string
+	// 章节内容页面，小说内容的选择器
+	ContentSelector string
+	// html文本替换字符串
+	StrReplace map[string]string
+    // html文本替换字符串，正则表达式形式
+	RegReplace map[string]string
+	// html文本中要删除的标签对应的选择器
+	RemoveSelector []string
+	
+	FrequencyLimit
+	NextChapterList
+	NextContent
+}
+
+// 并发限制，有默认值
+type FrequencyLimit struct {
+	// 并发数量限制
+	Concurrent int
+	// 每次请求后线程的休眠时间
+	Gap time.Duration
+}
+
+// 目录为分页展示时，需要加上此部分信息
+type NextChapterList struct {
+	// 如果分页展示，设置为true
+	MultiPageChapterList    bool
+	// 目录页面中，下一页a标签的选择器
+	ChapterListNextSelector string
+	// 目录页面中，下一页a标签应包含的文本
+	ChapterListNextStr      string
+}
+
+// 章节内容分页展示时，需要加上此部分信息
+type NextContent struct {
+    // 如果分页展示，设置为true
+	MultiPageContent    bool
+	// 章节内容页面中，下一页a标签的选择器
+	ContentNextSelector string
+	// 章节内容页面中，下一页a标签应包含的文本
+	ContentNextStr      string
+}
+
+```
+
+info.yml文件的具体格式如下面所示，可以同时配置多个网站。
+
+其中ASelector和ContentSelector是必需字段，其余字段如果没有特殊需求可以省略。
+
+程序内部已经适配了一些网站，如果想要爬取未适配的网站，可以在yml文件中按照格式要求自行添加相关信息。
+
+```yaml
+Info:
+  
+  "www.wbsz.org":
+    ASelector: ".chapter > ul > li > a"
+    ContentSelector: ".readerCon"
+    RemoveSelector: ['script']
+    FrequencyLimit:
+      Concurrent: 4
+      Gap: 250ms
+
+
+  "www.xbiqugeo.com":
+    ASelector: ".section-box:nth-child(4) > ul > li > a"
+    ContentSelector: "#content"
+    RemoveSelector: ["a", "div"]
+    FrequencyLimit:
+      Concurrent: 4
+      Gap: 250ms
+    NextChapterList:
+      MultiPageChapterList: true
+      ChapterListNextSelector: ".listpage > .right > a"
+      ChapterListNextStr: "下一页"
+    NextContent:
+      MultiPageContent: true
+      ContentNextStr: "下一页"
+      ContentNextSelector: "#next_url"
 ```

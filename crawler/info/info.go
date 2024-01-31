@@ -167,6 +167,16 @@ var infoMap = map[string]info_interf.Info{
 		ASelector:       ".section-box:nth-child(4) li > a",
 		ContentSelector: "#content",
 	},
+	"m.wfxs.tw": {
+		ASelector:       "ul > li > a",
+		ContentSelector: "#content",
+		RemoveSelector:  []string{"a"},
+		NextContent: info_interf.NextContent{
+			MultiPageContent:    true,
+			ContentNextStr:      "下一頁",
+			ContentNextSelector: ".list_page > span:last-child > a",
+		},
+	},
 }
 
 // 防止冗余，如果有两个网站info相同，可以直接记录在这里，同时支持并发限制自定义
